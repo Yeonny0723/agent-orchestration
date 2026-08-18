@@ -1,0 +1,4 @@
+interface:
+  display_name: "테스트 민감도 검증"
+  short_description: "작은 행위 결함을 관련 테스트가 실제로 감지하는지 안전하게 확인"
+  default_prompt: "의도한 행위를 작게 깨뜨렸을 때 영향 범위의 테스트가 실패하는지 검증해 주세요."

@@ -1,0 +1,8 @@
+{
+  "name": "agent-orchestration",
+  "version": "0.1.0",
+  "description": "코딩 에이전트를 위한 규모별 기획, TDD 구현, 검증, 작업 이해, PR 워크플로우.",
+  "author": {
+    "name": "kkjuyeon"
+  }
+}
