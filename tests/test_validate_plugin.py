@@ -66,6 +66,26 @@ class ValidatePluginTests(unittest.TestCase):
         root = Path(__file__).parents[1]
         self.assertEqual([], validate_plugin(root))
 
+    def test_rejects_marketplace_that_does_not_point_to_plugin_root(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_matching_manifests(root)
+            (root / "marketplace.json").write_text(
+                json.dumps({
+                    "name": "local",
+                    "plugins": [{"name": "agent-orchestration", "source": {"path": "./plugins/agent-orchestration"}}],
+                }),
+                encoding="utf-8",
+            )
+            (root / ".claude-plugin/marketplace.json").write_text(
+                json.dumps({"name": "local", "plugins": [{"name": "agent-orchestration", "source": "."}]}),
+                encoding="utf-8",
+            )
+
+            errors = validate_plugin(root)
+
+            self.assertIn("Codex marketplace source must point to plugin root: marketplace.json", errors)
+
     @staticmethod
     def _write_matching_manifests(root: Path) -> None:
         for directory in (".codex-plugin", ".claude-plugin"):

@@ -91,7 +91,25 @@ provider는 `origin` remote와 CLI 상태를 기준으로 GitHub 또는 GitLab�
 
 ## 설치와 의존성
 
-플러그인 원본을 Codex와 Claude Code에서 사용할 수 있도록 등록하려면 `setup-orchestration` skill을 사용합니다. 설치 과정은 다음 외부 skill을 확인하고, 사용자 범위의 충돌을 덮어쓰지 않습니다.
+플러그인 원본을 Codex와 Claude Code에서 사용자 전역 plugin으로 설치하려면 저장소 경로를 각 호스트의 marketplace로 등록한 뒤 plugin을 설치합니다. 이 저장소는 현재 root 자체를 plugin source로 가리키는 marketplace manifest를 제공합니다.
+
+Claude Code:
+
+```powershell
+claude plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration" --scope user
+claude plugin install agent-orchestration@agent-orchestration-marketplace --scope user
+```
+
+Codex:
+
+```powershell
+codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration"
+codex plugin add agent-orchestration@agent-orchestration-marketplace
+```
+
+설치 후 새 Claude Code 또는 Codex thread를 시작합니다. 업데이트할 때는 marketplace source의 변경사항을 갱신한 뒤 각 호스트의 plugin update/install 명령을 사용합니다. 외부 skill 의존성까지 점검하려면 `setup-orchestration` skill을 별도로 호출합니다.
+
+설치 과정은 다음 외부 skill을 확인하고, 사용자 범위의 충돌을 덮어쓰지 않습니다.
 
 - `superpowers`
 - `grill-with-docs`

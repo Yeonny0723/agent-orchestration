@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 MANIFESTS = (Path(".codex-plugin/plugin.json"), Path(".claude-plugin/plugin.json"))
+MARKETPLACES = (Path("marketplace.json"), Path(".claude-plugin/marketplace.json"))
 SCAN_ROOTS = (".codex-plugin", ".claude-plugin", "commands", "skills", "agents", "adapters", "conventions", "templates")
 PLACEHOLDER_PATTERNS = ("[TODO:", "[TODO]", "TODO: Complete", "TODO: Replace")
 
@@ -89,6 +90,38 @@ def _validate_commands(root: Path, errors: list[str]) -> None:
             errors.append(f"unknown command delegate in {relative}: {matches[0]}")
 
 
+def _validate_marketplaces(root: Path, errors: list[str]) -> None:
+    for relative in MARKETPLACES:
+        path = root / relative
+        if not path.is_file():
+            errors.append(f"missing marketplace manifest: {relative.as_posix()}")
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as error:
+            errors.append(f"invalid JSON in {relative.as_posix()}: {error.msg}")
+            continue
+
+        if not data.get("name"):
+            errors.append(f"missing marketplace field name: {relative.as_posix()}")
+        plugins = data.get("plugins")
+        if not isinstance(plugins, list):
+            errors.append(f"missing marketplace plugins: {relative.as_posix()}")
+            continue
+
+        plugin = next((item for item in plugins if isinstance(item, dict) and item.get("name") == "agent-orchestration"), None)
+        if plugin is None:
+            errors.append(f"missing agent-orchestration marketplace entry: {relative.as_posix()}")
+            continue
+
+        source = plugin.get("source")
+        if relative == Path("marketplace.json"):
+            if not isinstance(source, dict) or source.get("path") != ".":
+                errors.append(f"Codex marketplace source must point to plugin root: {relative.as_posix()}")
+        elif source != ".":
+            errors.append(f"Claude marketplace source must point to plugin root: {relative.as_posix()}")
+
+
 def _validate_placeholders(root: Path, errors: list[str]) -> None:
     for root_name in SCAN_ROOTS:
         scan_root = root / root_name
@@ -116,6 +149,7 @@ def validate_plugin(root: Path) -> list[str]:
     _validate_skills(root, errors)
     _validate_agents(root, errors)
     _validate_commands(root, errors)
+    _validate_marketplaces(root, errors)
     _validate_placeholders(root, errors)
     return errors
 
