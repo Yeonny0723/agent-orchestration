@@ -5,7 +5,7 @@ description: 현재 작업 맥락에서 버그 또는 기능 이슈 초안을 �
 
 # 이슈 작성
 
-이 skill은 직접 호출과 `git-issue` command 위임에 같은 절차를 사용한다.
+이 skill은 직접 호출과 `git:issue` command 위임에 같은 절차를 사용한다.
 
 ## Provider 감지
 

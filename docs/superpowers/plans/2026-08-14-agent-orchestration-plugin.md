@@ -129,7 +129,7 @@
 - **질문:** PR 생성이나 TDD 기반 구현처럼 사용자가 직접 실행할 기능을 나중에 구분된 command로 제공할 수 있도록 어떤 경계를 둘 것인가?
 - **선택:** 기능마다 독립 skill을 정식 진입점으로 두고, Git 작업은 호스트 공통 command가 대응 skill 하나에 1:1로 위임하는 얇은 adapter로 만든다.
 - **이유:** Codex와 Claude Code가 공유하는 동작 계약을 skill 한 곳에 유지하면서도 사용자가 필요한 단계만 분명한 command로 호출할 수 있다.
-- **구현상 결과:** `implement-with-tdd`, `verify-test-sensitivity`, `understand-work`, `commit-changes`, `write-issue`, `post-git-comment`, `write-pr`를 분리하고 `orchestrate-work`는 개발 흐름에 필요한 기능만 조합한다. `git-commit`, `git-issue`, `git-comment`, `git-pr` command adapter에는 판단, provider 감지, 상태 전이, 검증 또는 문서 생성 로직을 두지 않는다. GitHub/GitLab 감지와 외부 쓰기 승인 게이트는 각 skill이 담당한다.
+- **구현상 결과:** `implement-with-tdd`, `verify-test-sensitivity`, `understand-work`, `commit-changes`, `write-issue`, `post-git-comment`, `write-pr`를 분리하고 `orchestrate-work`는 개발 흐름에 필요한 기능만 조합한다. `git:commit`, `git:issue`, `git:comment`, `git:pr` command adapter에는 판단, provider 감지, 상태 전이, 검증 또는 문서 생성 로직을 두지 않는다. GitHub/GitLab 감지와 외부 쓰기 승인 게이트는 각 skill이 담당한다.
 - **spec 영향:** 있음. 독립 실행 진입점과 향후 1:1 command adapter 원칙을 spec에 추가했다.
 
 ## 파일 구성
@@ -796,7 +796,7 @@ git commit -m "feat(codex): install project-scoped custom agents safely"
 
 먼저 `init_skill.py write-pr --path skills --interface display_name="PR 작성" --interface short_description="spec, diff, 검증 근거로 PR 초안 작성" --interface default_prompt="승인된 spec, 실제 diff, 최종 검증 근거를 확인하고 이 변경의 한국어 PR 초안을 작성해 주세요."`로 초기화한 뒤 생성된 placeholder를 모두 교체한다.
 
-skill은 Codex, Claude Code 또는 같은 Agent Skills 형식을 지원하는 다른 코딩 에이전트에서 동일하게 동작한다. orchestrator가 자동으로 실행하거나 다른 세션을 열지 않으며, 사용자가 skill을 직접 호출하거나 `git-pr` command를 호출할 때만 시작한다. command는 이 skill을 1:1로 호출하며 별도 PR 로직을 갖지 않는다.
+skill은 Codex, Claude Code 또는 같은 Agent Skills 형식을 지원하는 다른 코딩 에이전트에서 동일하게 동작한다. orchestrator가 자동으로 실행하거나 다른 세션을 열지 않으며, 사용자가 skill을 직접 호출하거나 `git:pr` command를 호출할 때만 시작한다. command는 이 skill을 1:1로 호출하며 별도 PR 로직을 갖지 않는다.
 
 - [ ] **4단계: PR 근거 확인과 작성 절차 구현**
 

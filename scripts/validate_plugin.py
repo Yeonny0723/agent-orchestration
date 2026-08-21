@@ -81,7 +81,7 @@ def _validate_commands(root: Path, errors: list[str]) -> None:
     if not commands.is_dir():
         return
     skills = {path.name for path in (root / "skills").iterdir() if path.is_dir()} if (root / "skills").is_dir() else set()
-    for path in sorted(commands.glob("*.md")):
+    for path in sorted(commands.rglob("*.md")):
         matches = re.findall(r"(?m)^Delegate-To: `([^`]+)`$", path.read_text(encoding="utf-8"))
         relative = path.relative_to(root).as_posix()
         if len(matches) != 1:

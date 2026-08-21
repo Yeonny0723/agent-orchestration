@@ -14,7 +14,7 @@
 - `verify-test-sensitivity`는 전체 orchestrator를 시작하지 않고 mutation 하나, killed/survived 판정, 정확한 복원과 원본 검증만 수행한다.
 - `understand-work`는 최대 5문항을 한 번에 하나씩 모두 묻고 결과를 현재 대화에만 남긴다.
 - `write-pr`은 현재 spec, 실제 diff와 재실행한 검증 근거로 한국어 초안을 만들고 사용자 승인 전에는 외부 PR을 생성하지 않는다.
-- `git-commit`, `git-issue`, `git-comment`, `git-pr`은 대응 skill 하나에만 위임한다.
+- `git:commit`, `git:issue`, `git:comment`, `git:pr`은 대응 skill 하나에만 위임한다.
 - 이슈, 코멘트와 PR/MR command는 GitHub 또는 GitLab을 감지하지 못하면 외부 쓰기 없이 초안과 중단 사유를 보고한다.
 - 외부 이슈, 코멘트, PR/MR 생성과 push는 사용자 승인 전에는 수행하지 않는다.
 

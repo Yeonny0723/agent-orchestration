@@ -7,7 +7,7 @@ description: 구현이 끝난 현재 저장소에서 승인된 spec과 실제 di
 
 ## 진입
 
-사용자가 직접 호출할 때만 시작한다. `orchestrate-work`가 자동 실행하거나 다른 세션을 열지 않는다. 사용자가 선택한 Codex, Claude Code 또는 Agent Skills 호환 agent에서 같은 계약을 사용하며 특정 호스트나 PR writer agent를 고정하지 않는다. 향후 command adapter도 이 skill에만 1:1로 위임한다.
+사용자가 직접 호출할 때만 시작한다. `orchestrate-work`가 자동 실행하거나 다른 세션을 열지 않는다. 사용자가 선택한 Codex, Claude Code 또는 Agent Skills 호환 agent에서 같은 계약을 사용하며 특정 호스트나 PR writer agent를 고정하지 않는다. `git:pr` command와 모든 호스트별 PR 진입점은 이 skill에만 1:1로 위임한다.
 
 ## 근거와 검증
 

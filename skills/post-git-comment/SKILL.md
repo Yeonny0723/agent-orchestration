@@ -5,7 +5,7 @@ description: GitHub나 GitLab의 이슈 또는 PR/MR에 현재 대화 맥락을 
 
 # Git 코멘트 게시
 
-이 skill은 직접 호출과 `git-comment` command 위임에 같은 절차를 사용한다.
+이 skill은 직접 호출과 `git:comment` command 위임에 같은 절차를 사용한다.
 
 ## Provider와 대상 확인
 

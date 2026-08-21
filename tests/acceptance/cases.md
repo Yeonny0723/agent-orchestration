@@ -42,21 +42,21 @@
 
 ## Git command
 
-### `git-commit`
+### `git:commit`
 
-"현재 staged 변경을 논리적인 커밋으로 만들고 싶어. `git-commit`으로 계획부터 보여 줘."
+"현재 staged 변경을 논리적인 커밋으로 만들고 싶어. `git:commit`으로 계획부터 보여 줘."
 
-### `git-issue`
+### `git:issue`
 
-"로그인 실패가 반복되는 버그 이슈를 `git-issue`로 작성해 줘."
+"로그인 실패가 반복되는 버그 이슈를 `git:issue`로 작성해 줘."
 
-### `git-comment`
+### `git:comment`
 
-"이슈 42에 조사 결과를 `git-comment`로 남겨 줘."
+"이슈 42에 조사 결과를 `git:comment`로 남겨 줘."
 
-### `git-pr`
+### `git:pr`
 
-"현재 변경으로 `git-pr`를 실행해 PR 초안을 작성해 줘."
+"현재 변경으로 `git:pr`를 실행해 PR 초안을 작성해 줘."
 
 ## 테스트 민감도 실패
 

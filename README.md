@@ -67,12 +67,13 @@ Git 관련 기능은 얇은 command가 대응 skill에 1:1로 위임합니다.
 
 | 커맨드 | 위임 skill | 동작 |
 | --- | --- | --- |
-| `/git-commit` | `commit-changes` | 원자적 커밋 계획을 제시하고 승인 후 로컬 커밋 |
-| `/git-issue` | `write-issue` | GitHub Issue 또는 GitLab Issue 초안 작성 및 승인 후 생성 |
-| `/git-comment` | `post-git-comment` | Issue·PR·MR 코멘트 초안 작성 및 승인 후 게시 |
-| `/git-pr` | `write-pr` | spec·diff·검증 근거 기반 PR/MR 작성 및 승인 후 생성 |
+| `/git:commit` | `commit-changes` | 원자적 커밋 계획을 제시하고 승인 후 로컬 커밋 |
+| `/git:issue` | `write-issue` | GitHub Issue 또는 GitLab Issue 초안 작성 및 승인 후 생성 |
+| `/git:comment` | `post-git-comment` | Issue·PR·MR 코멘트 초안 작성 및 승인 후 게시 |
+| `/git:pr` | `write-pr` | spec·diff·검증 근거 기반 PR/MR 작성 및 승인 후 생성 |
 
 provider는 `origin` remote와 CLI 상태를 기준으로 GitHub 또는 GitLab을 자동 감지합니다. 감지할 수 없거나 모호하면 외부 쓰기를 실행하지 않습니다. push, commit, issue/comment/PR 생성은 초안과 실행 명령을 보여준 뒤 승인받아 수행합니다.
+
 
 ## 디렉터리 구조
 

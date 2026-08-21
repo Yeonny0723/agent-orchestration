@@ -1,9 +1,9 @@
 ---
-description: spec, 실제 diff와 검증 근거로 PR/MR 초안을 작성하고 승인 후 생성합니다.
+description: spec, 실제 diff와 검증 근거로 PR/MR을 작성하고 승인 후 생성합니다.
 argument-hint: "[target branch] [관련 이슈 번호]"
 ---
 
-# /git-pr
+# /git:pr
 
 Delegate-To: `write-pr`
 

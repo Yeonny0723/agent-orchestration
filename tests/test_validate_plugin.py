@@ -53,14 +53,15 @@ class ValidatePluginTests(unittest.TestCase):
             root = Path(directory)
             self._write_matching_manifests(root)
             (root / "commands").mkdir()
-            (root / "commands/git-pr.md").write_text(
+            (root / "commands/git/pr.md").parent.mkdir(parents=True)
+            (root / "commands/git/pr.md").write_text(
                 "# Git PR\n\nDelegate-To: `missing-skill`\n",
                 encoding="utf-8",
             )
 
             errors = validate_plugin(root)
 
-            self.assertIn("unknown command delegate in commands/git-pr.md: missing-skill", errors)
+            self.assertIn("unknown command delegate in commands/git/pr.md: missing-skill", errors)
 
     def test_repository_is_valid(self):
         root = Path(__file__).parents[1]

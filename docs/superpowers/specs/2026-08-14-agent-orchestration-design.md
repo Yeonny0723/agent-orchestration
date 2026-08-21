@@ -125,7 +125,7 @@ agent는 plan을 작성하면서 spec이 의도적으로 열어 둔 구현 수�
 
 Codex와 Claude Code용 command는 command 하나가 skill 하나에 1:1로 위임하는 얇은 adapter로 만든다. command는 인자 전달과 해당 skill 호출만 담당하며 판단, provider 감지, 상태 전이, 검증 또는 문서 생성 로직을 포함하지 않는다. 여러 기능을 mode 인자로 분기하는 단일 만능 command는 만들지 않는다.
 
-초기 command는 `git-commit`, `git-issue`, `git-comment`, `git-pr` 네 개다. 각각 `commit-changes`, `write-issue`, `post-git-comment`, `write-pr`에 위임한다. issue, comment와 PR은 `origin` remote를 기준으로 GitHub와 GitLab을 자동 감지하고 해당 provider의 `gh` 또는 `glab`을 사용한다. 감지 결과가 모호하거나 필요한 CLI가 없으면 외부 쓰기를 시도하지 않는다. commit 실행과 외부 issue, comment, PR 생성 및 필요한 push는 사용자에게 초안과 실행 범위를 보여주고 승인받은 뒤에만 수행한다.
+초기 command는 `git:commit`, `git:issue`, `git:comment`, `git:pr` 네 개다. 각각 `commit-changes`, `write-issue`, `post-git-comment`, `write-pr`에 위임한다. issue, comment와 PR은 `origin` remote를 기준으로 GitHub와 GitLab을 자동 감지하고 해당 provider의 `gh` 또는 `glab`을 사용한다. 감지 결과가 모호하거나 필요한 CLI가 없으면 외부 쓰기를 시도하지 않는다. commit 실행과 외부 issue, comment, PR 생성 및 필요한 push는 사용자에게 초안과 실행 범위를 보여주고 승인받은 뒤에만 수행한다.
 
 ### 5. 작업 이해 세션은 사용자 수동 호출형이다
 
@@ -180,7 +180,7 @@ Adept의 상황 우선, 실제 업무와 같은 응답 형태, 회상 질문 금
 
 ### 10. PR 작성 에이전트는 사용자가 호출 시점에 선택한다
 
-워크플로우는 특정 에이전트에게 PR 작성 책임을 고정하거나 다른 세션을 자동으로 열지 않는다. 사용자는 구현이 끝난 뒤 원하는 Codex, Claude Code 또는 다른 호환 코딩 에이전트 세션에서 `write-pr` skill 또는 `git-pr` command를 명시적으로 호출한다. `git-pr`은 이 skill에만 위임한다.
+워크플로우는 특정 에이전트에게 PR 작성 책임을 고정하거나 다른 세션을 자동으로 열지 않는다. 사용자는 구현이 끝난 뒤 원하는 Codex, Claude Code 또는 다른 호환 코딩 에이전트 세션에서 `write-pr` skill 또는 `git:pr` command를 명시적으로 호출한다. `git:pr`은 이 skill에만 위임한다.
 
 호출받은 에이전트는 다음 순서로 작업한다.
 

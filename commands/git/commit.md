@@ -1,9 +1,9 @@
 ---
-description: 현재 변경을 원자적 커밋으로 계획하고 승인 후 생성합니다.
+description: 커밋 계획을 제시하고 승인 후 원자적 커밋을 생성합니다.
 argument-hint: "[커밋 메시지 또는 분할 힌트]"
 ---
 
-# /git-commit
+# /git:commit
 
 Delegate-To: `commit-changes`
 

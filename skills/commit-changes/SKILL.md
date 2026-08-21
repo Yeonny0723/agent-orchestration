@@ -5,7 +5,7 @@ description: 현재 Git 변경을 원자적 커밋으로 나누어 계획하거�
 
 # 커밋 생성
 
-이 skill은 직접 호출과 `git-commit` command 위임에 같은 절차를 사용한다. push는 책임 범위가 아니다.
+이 skill은 직접 호출과 `git:commit` command 위임에 같은 절차를 사용한다. push는 책임 범위가 아니다.
 
 ## 변경 확인
 
@@ -30,7 +30,7 @@ description: 현재 Git 변경을 원자적 커밋으로 나누어 계획하거�
 - 최종 커밋 메시지
 - 의존성 및 lockfile 경고
 
-메시지는 `type(scope): 명령형 한글 요약`을 기본으로 하며 scope는 선택 사항이다. 제목은 72자 미만으로 유지하고 변경 목적 하나만 설명한다. 허용 type은 `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`다.
+메시지는 `type(scope): 명령형 한글 요약`을 기본으로 하며 scope는 선택 사항이다. 제목은 72자 미만으로 유지하고 변경 목적 하나만 설명한다. 본문(description)은 기본적으로 만들지 않으며 사용자가 명시적으로 요청한 경우에만 추가한다. 허용 type은 `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `chore`다.
 
 승인 전에는 staging이나 commit을 변경하지 않는다. 수정 요청이 있으면 계획을 갱신하고 다시 승인받는다.
 
@@ -40,4 +40,5 @@ description: 현재 Git 변경을 원자적 커밋으로 나누어 계획하거�
 2. 각 staged diff가 승인된 범위와 같은지 다시 확인한다.
 3. 승인된 메시지로 commit하고 결과 hash와 제목을 보고한다.
 4. AI 서명, `Co-Authored-By` 또는 생성 도구 표식을 추가하지 않는다.
-5. commit 실패 시 우회하거나 amend하지 말고 원인과 현재 staged 상태를 보고한다.
+5. `--signoff`, `--author`, `--trailer`와 자동 생성 attribution을 사용하지 않는다.
+6. commit 실패 시 우회하거나 amend하지 말고 원인과 현재 staged 상태를 보고한다.

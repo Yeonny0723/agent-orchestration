@@ -1,6 +1,6 @@
 # 독립 실행 진입점 계약
 
-`git-commit`, `git-issue`, `git-comment`, `git-pr` command는 아래 대응 skill 하나에만 1:1로 위임하며 인자 전달 외의 업무 로직을 포함하지 않는다. provider 감지, Git 실행, 상태 전이, 검증과 문서 작성은 skill이 담당한다. mode 인자로 여러 기능을 분기하는 단일 command를 만들지 않는다.
+`git:commit`, `git:issue`, `git:comment`, `git:pr` command는 아래 대응 skill 하나에만 1:1로 위임하며 인자 전달 외의 업무 로직을 포함하지 않는다. provider 감지, Git 실행, 상태 전이, 검증과 문서 작성은 skill이 담당한다. 전역 Claude Code command나 다른 호스트 adapter에도 별도 Git 구현을 두지 않는다. mode 인자로 여러 기능을 분기하는 단일 command를 만들지 않는다.
 
 ## `implement-with-tdd`
 
@@ -28,25 +28,25 @@
 - 책임: 현재 변경을 원자적 Conventional Commit 계획으로 제시하고 승인 후 로컬 commit을 생성한다.
 - 입력: 현재 Git 상태, staged·unstaged diff, 사용자 메시지 또는 커밋 분할 요청.
 - 종료: 승인된 commit hash와 제목 또는 승인 전 계획·중단 사유.
-- 호출: 사용자 직접 호출 또는 `git-commit` command 위임.
+- 호출: 사용자 직접 호출 또는 `git:commit` command 위임.
 
 ## `write-issue`
 
 - 책임: provider를 감지해 자체 완결적인 이슈 초안을 작성하고 승인 후 생성한다.
 - 입력: 제목, 유형, labels, 현재 대화와 승인된 작업 문서.
 - 종료: 이슈 URL·번호 또는 보존된 초안과 중단 사유.
-- 호출: 사용자 직접 호출 또는 `git-issue` command 위임.
+- 호출: 사용자 직접 호출 또는 `git:issue` command 위임.
 
 ## `post-git-comment`
 
 - 책임: 이슈 또는 PR·MR 코멘트 초안을 작성하고 승인 후 게시한다.
 - 입력: 대상 번호, 대상 유형, 사용자 제공 본문 또는 현재 대화 맥락.
 - 종료: 게시 URL·식별자 또는 보존된 초안과 중단 사유.
-- 호출: 사용자 직접 호출 또는 `git-comment` command 위임.
+- 호출: 사용자 직접 호출 또는 `git:comment` command 위임.
 
 ## `write-pr`
 
 - 책임: 현재 근거를 재검증하고 한국어 PR 초안을 작성하며 승인 후 PR을 생성한다.
 - 입력: 승인된 spec, 실제 diff, 현재 실행 가능한 검증 명령.
 - 종료: 사용자 승인된 PR 또는 부족한 근거 보고.
-- 호출: 사용자가 선택한 코딩 에이전트 세션의 직접 호출만 허용한다.
+- 호출: 사용자 직접 호출 또는 `git:pr` command 위임.

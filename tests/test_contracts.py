@@ -38,7 +38,7 @@ class WorkflowContractTests(unittest.TestCase):
             self.assertEqual(1, len(re.findall(rf"^## `{skill}`$", text, re.MULTILINE)))
         self.assertIn("1:1", text)
         self.assertIn("업무 로직을 포함하지 않는다", text)
-        for command in ("git-commit", "git-issue", "git-comment", "git-pr"):
+        for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, text)
 
 
@@ -108,12 +108,16 @@ class SkillContractTests(unittest.TestCase):
 
     def test_git_commands_delegate_one_to_one_without_business_logic(self):
         commands = {
-            "git-commit.md": "commit-changes",
-            "git-issue.md": "write-issue",
-            "git-comment.md": "post-git-comment",
-            "git-pr.md": "write-pr",
+            "git/commit.md": "commit-changes",
+            "git/issue.md": "write-issue",
+            "git/comment.md": "post-git-comment",
+            "git/pr.md": "write-pr",
         }
-        self.assertEqual(set(commands), {path.name for path in (ROOT / "commands").glob("*.md")})
+        actual = {
+            path.relative_to(ROOT / "commands").as_posix()
+            for path in (ROOT / "commands").rglob("*.md")
+        }
+        self.assertEqual(set(commands), actual)
         for filename, skill in commands.items():
             text = read(f"commands/{filename}")
             self.assertEqual(1, text.count(f"Delegate-To: `{skill}`"), filename)
@@ -139,6 +143,10 @@ class SkillContractTests(unittest.TestCase):
             "lockfile",
             "정확한 버전",
             "AI 서명",
+            "본문(description)",
+            "--signoff",
+            "--author",
+            "--trailer",
         ):
             self.assertIn(phrase, text)
 
@@ -205,6 +213,9 @@ class ConventionContractTests(unittest.TestCase):
             "getter",
             "도메인 용어",
             "CONTEXT.md",
+            "UBIQUITOUS_LANGUAGE.md",
+            "canonical term",
+            "임의로 확정하지 말고",
             "일반화",
             "스크린샷",
         ):
@@ -233,7 +244,7 @@ class AcceptanceContractTests(unittest.TestCase):
         for skill in ("implement-with-tdd", "verify-test-sensitivity", "understand-work", "write-pr"):
             self.assertIn(skill, cases)
             self.assertIn(skill, expected)
-        for command in ("git-commit", "git-issue", "git-comment", "git-pr"):
+        for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, cases)
             self.assertIn(command, expected)
 
