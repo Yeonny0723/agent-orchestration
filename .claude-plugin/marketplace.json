@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "agent-orchestration-marketplace",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Codex와 Claude Code에서 규모별 개발 워크플로우를 운영하는 plugin marketplace.",
   "owner": {
     "name": "kkjuyeon"
@@ -11,7 +11,7 @@
       "name": "agent-orchestration",
       "source": ".",
       "description": "규모별 기획, TDD 구현, 테스트 민감도 검증, 작업 이해와 PR 작성을 제공하는 plugin.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": {
         "name": "kkjuyeon"
       },
