@@ -1,0 +1,20 @@
+{
+  "name": "agent-orchestration",
+  "version": "0.1.1",
+  "description": "코딩 에이전트를 위한 규모별 기획, TDD 구현, 검증, 작업 이해, PR 워크플로우.",
+  "author": {
+    "name": "kkjuyeon"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Agent Orchestration",
+    "shortDescription": "개발 작업의 기획, 구현, 검증과 PR 준비",
+    "longDescription": "작업 규모에 맞춰 spec 의사결정, TDD 구현, 테스트 민감도 검증, 선택형 작업 이해와 PR 작성을 Codex와 Claude Code에서 일관되게 운영합니다.",
+    "developerName": "kkjuyeon",
+    "category": "Developer Tools",
+    "capabilities": ["Interactive", "Read", "Write"],
+    "defaultPrompt": [
+      "이 개발 작업을 규모에 맞는 워크플로우로 진행해 주세요."
+    ]
+  }
+}

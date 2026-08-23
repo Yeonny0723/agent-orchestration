@@ -1,0 +1,20 @@
+[
+  {
+    "name": "단일 파일의 명확한 버그 수정",
+    "facts": {"kind": "bugfix", "modules": 1, "independent_outputs": 1, "prs": 1},
+    "expected": "small",
+    "decision_grill": "optional"
+  },
+  {
+    "name": "한 PR로 끝나는 기능",
+    "facts": {"kind": "feature", "modules": 2, "independent_outputs": 1, "prs": 1},
+    "expected": "medium",
+    "decision_grill": "required"
+  },
+  {
+    "name": "여러 모듈에 걸친 기능 배포",
+    "facts": {"kind": "feature", "modules": 3, "independent_outputs": 3, "prs": 3},
+    "expected": "large",
+    "decision_grill": "required"
+  }
+]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "컨벤션 적용"
+  short_description: "변경 기술 스택에 맞는 프로젝트와 플러그인 컨벤션을 선택"
+  default_prompt: "이 변경에 관련된 프로젝트 및 플러그인 컨벤션 팩을 적용해 주세요."

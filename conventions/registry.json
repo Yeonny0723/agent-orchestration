@@ -1,0 +1,41 @@
+{
+  "priority": [
+    "project",
+    "plugin",
+    "default"
+  ],
+  "packs": [
+    {
+      "id": "general",
+      "file": "general.md",
+      "extensions": [
+        "*"
+      ]
+    },
+    {
+      "id": "python",
+      "file": "python/python-clean-code.md",
+      "extensions": [
+        ".py"
+      ]
+    },
+    {
+      "id": "typescript",
+      "file": "typescript/typescript-clean-code.md",
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx"
+      ]
+    },
+    {
+      "id": "react",
+      "file": "react.md",
+      "extensions": [
+        ".tsx",
+        ".jsx"
+      ]
+    }
+  ]
+}

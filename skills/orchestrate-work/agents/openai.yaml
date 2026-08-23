@@ -1,0 +1,4 @@
+interface:
+  display_name: "작업 오케스트레이션"
+  short_description: "개발 작업을 규모에 맞는 기획과 검증 흐름으로 정확히 라우팅"
+  default_prompt: "이 개발 작업의 규모를 판정하고 적절한 워크플로우로 진행해 주세요."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Git 코멘트 게시"
+  short_description: "GitHub와 GitLab 이슈 또는 PR 코멘트를 승인 후 게시"
+  default_prompt: "현재 대화 맥락을 한국어 코멘트 초안으로 정리하고 승인 후 게시해 주세요."

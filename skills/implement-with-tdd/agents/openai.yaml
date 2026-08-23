@@ -1,0 +1,4 @@
+interface:
+  display_name: "TDD 기반 구현"
+  short_description: "승인된 작업 기준을 테스트 우선 방식으로 구현하고 일반 검증"
+  default_prompt: "승인된 spec과 plan을 기준으로 TDD 방식으로 구현하고 일반 검증까지 수행해 주세요."
