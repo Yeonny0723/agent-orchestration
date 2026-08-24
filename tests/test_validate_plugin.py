@@ -67,6 +67,23 @@ class ValidatePluginTests(unittest.TestCase):
         root = Path(__file__).parents[1]
         self.assertEqual([], validate_plugin(root))
 
+    def test_requires_codex_repo_marketplace_at_standard_path(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            self._write_matching_manifests(root)
+            (root / "marketplace.json").write_text(
+                json.dumps({"name": "local", "plugins": [{"name": "agent-orchestration", "source": {"path": "."}}]}),
+                encoding="utf-8",
+            )
+            (root / ".claude-plugin/marketplace.json").write_text(
+                json.dumps({"name": "local", "plugins": [{"name": "agent-orchestration", "source": "."}]}),
+                encoding="utf-8",
+            )
+
+            errors = validate_plugin(root)
+
+            self.assertIn("missing marketplace manifest: .agents/plugins/marketplace.json", errors)
+
     def test_rejects_marketplace_that_does_not_point_to_plugin_root(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

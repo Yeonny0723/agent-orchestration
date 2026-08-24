@@ -8,7 +8,11 @@ from pathlib import Path
 
 
 MANIFESTS = (Path(".codex-plugin/plugin.json"), Path(".claude-plugin/plugin.json"))
-MARKETPLACES = (Path("marketplace.json"), Path(".claude-plugin/marketplace.json"))
+MARKETPLACES = (
+    Path("marketplace.json"),
+    Path(".agents/plugins/marketplace.json"),
+    Path(".claude-plugin/marketplace.json"),
+)
 SCAN_ROOTS = (".codex-plugin", ".claude-plugin", "commands", "skills", "agents", "adapters", "conventions", "templates")
 PLACEHOLDER_PATTERNS = ("[TODO:", "[TODO]", "TODO: Complete", "TODO: Replace")
 
@@ -118,6 +122,9 @@ def _validate_marketplaces(root: Path, errors: list[str]) -> None:
         if relative == Path("marketplace.json"):
             if not isinstance(source, dict) or source.get("path") != ".":
                 errors.append(f"Codex marketplace source must point to plugin root: {relative.as_posix()}")
+        elif relative == Path(".agents/plugins/marketplace.json"):
+            if not isinstance(source, dict) or source.get("source") != "local" or source.get("path") != "./":
+                errors.append(f"Codex repo marketplace source must point to plugin root: {relative.as_posix()}")
         elif source != ".":
             errors.append(f"Claude marketplace source must point to plugin root: {relative.as_posix()}")
 
