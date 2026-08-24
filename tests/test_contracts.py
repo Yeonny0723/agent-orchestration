@@ -424,6 +424,29 @@ class SkillContractTests(unittest.TestCase):
         for phrase in ("항목별 승인", "사용자 범위", "directory junction", "symbolic link", "덮어쓰지"):
             self.assertIn(phrase, text)
 
+    def test_setup_offers_optional_authoring_skills_without_blocking(self):
+        text = read("skills/setup-orchestration/SKILL.md")
+        for dependency in ("stop-slop", "humanizer"):
+            self.assertIn(dependency, text)
+        for command in (
+            "npx skills add hardikpandya/stop-slop --global --skill stop-slop",
+            "npx skills add blader/humanizer --global --skill humanizer",
+        ):
+            self.assertIn(command, text)
+        for phrase in (
+            "선택형",
+            "둘 다 선택하지",
+            "자동 업데이트하지 않는다",
+            "작업을 차단하지 않는다",
+            "다른 원본",
+        ):
+            self.assertIn(phrase, text)
+        for path in (
+            "skills/setup-orchestration/SKILL.md",
+            "skills/author-reviewable-text/SKILL.md",
+        ):
+            self.assertNotIn("unslop", read(path), path)
+
 
 class ConventionContractTests(unittest.TestCase):
     def test_registry_has_unique_ids_and_existing_files(self):
