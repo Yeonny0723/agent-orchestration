@@ -48,6 +48,7 @@ class SkillContractTests(unittest.TestCase):
             "setup-orchestration",
             "orchestrate-work",
             "capture-authoring-voice",
+            "author-reviewable-text",
             "decision-first-grill",
             "apply-conventions",
             "implement-with-tdd",
@@ -66,6 +67,20 @@ class SkillContractTests(unittest.TestCase):
             self.assertRegex(skill, r"(?m)^description: .+$")
             for key in ("display_name", "short_description", "default_prompt"):
                 self.assertRegex(metadata, rf"(?m)^\s*{key}: .+$")
+
+    def test_author_reviewable_text_preserves_content_contract(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "최종 초안을 한 번",
+            "stop-slop",
+            "humanizer",
+            "선택형",
+            "차단하지 않는다",
+            "사용자의 명시적 지시",
+            "필수 형식",
+            "확인된 사실",
+        ):
+            self.assertIn(phrase, skill)
 
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
