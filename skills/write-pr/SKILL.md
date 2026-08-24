@@ -22,12 +22,12 @@ description: 구현이 끝난 현재 저장소에서 승인된 spec과 실제 di
 
 ## 작성과 provider 감지
 
-1. `author-reviewable-text`에 산출물 종류가 PR·MR 제목과 본문임을 밝히고 PR 템플릿과 필수 형식, 승인된 spec·실제 diff·검증 결과인 확인된 사실, provider의 길이 제한과 target branch 등 사용자 옵션을 전달한다. 반환된 한국어 제목과 본문 최종 초안을 사용한다.
-2. 시간순 작업 로그나 폐기한 시행착오 대신 최종 상태를 설명한다.
-3. 한국어 제목과 본문에 문제 배경, 목적, 주요 결정과 이유, 실제 변경, 검증 명령과 결과, 남은 위험을 포함한다.
-4. 실행 근거 없이 테스트 성공을 주장하지 않는다.
-5. `git remote get-url origin`으로 remote host와 저장소 경로를 확인한다. `github.com`이거나 `gh repo view`만 성공하면 GitHub, host가 GitLab이거나 `glab repo view`만 성공하면 GitLab으로 판정한다.
-6. 필요한 `gh` 또는 `glab` CLI와 인증 상태를 확인하되 token 값을 읽거나 출력하지 않는다. provider를 감지할 수 없거나 둘 다 성공하면 외부 생성은 중단하고 사용자에게 확인한다.
+1. `git remote get-url origin`으로 remote host와 저장소 경로를 확인한다. `github.com`이거나 `gh repo view`만 성공하면 GitHub, host가 GitLab이거나 `glab repo view`만 성공하면 GitLab으로 판정한다.
+2. 필요한 `gh` 또는 `glab` CLI와 인증 상태를 확인하되 token 값을 읽거나 출력하지 않는다. provider를 감지할 수 없거나 둘 다 성공하면 외부 생성은 중단하고 사용자에게 확인한다.
+3. 감지한 provider를 기준으로 `author-reviewable-text`에 산출물 종류가 PR·MR 제목과 본문임을 밝히고 PR 템플릿과 필수 형식, 승인된 spec·실제 diff·검증 결과인 확인된 사실, provider의 길이 제한과 target branch 등 사용자 옵션을 전달한다. 반환된 한국어 제목과 본문 최종 초안을 사용한다.
+4. 시간순 작업 로그나 폐기한 시행착오 대신 최종 상태를 설명한다.
+5. 한국어 제목과 본문에 문제 배경, 목적, 주요 결정과 이유, 실제 변경, 검증 명령과 결과, 남은 위험을 포함한다.
+6. 실행 근거 없이 테스트 성공을 주장하지 않는다.
 
 ## 승인과 생성
 
