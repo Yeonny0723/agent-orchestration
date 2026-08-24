@@ -82,6 +82,47 @@ class SkillContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, skill)
 
+    def test_author_reviewable_text_resolves_optional_inputs_without_blocking(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        primary = skill.index("$AGENT_ORCHESTRATION_HOME/voice-profile.md")
+        fallback = skill.index("~/.agent-orchestration/voice-profile.md")
+        self.assertLess(primary, fallback)
+        for phrase in (
+            "직접 확인",
+            "정확한 skill 이름",
+            "실패 원인",
+            "호출자에게 보고",
+            "작성을 차단하지 않는다",
+        ):
+            self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_preserves_literals_and_length(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "길이 제한",
+            "필수 절",
+            "숫자",
+            "파일명",
+            "명령어",
+            "선택지",
+            "차이",
+            "판단 기준",
+            "인용문",
+            "사용자가 제공한 인용문은 다시 쓰지 않는다",
+        ):
+            self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_keeps_caller_ownership_and_narrow_scope(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "호출자에게 반환",
+            "호출자가 승인",
+            "외부 쓰기",
+            "일반적인 선택형 질문",
+            "`understand-work` 질문",
+        ):
+            self.assertIn(phrase, skill)
+
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
         for phrase in ("전수 목록화", "한 번에 한 질문", "선택지", "트레이드오프", "추천안", "spec 작성 금지"):
