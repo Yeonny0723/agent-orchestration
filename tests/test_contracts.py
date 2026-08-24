@@ -84,17 +84,44 @@ class SkillContractTests(unittest.TestCase):
 
     def test_author_reviewable_text_resolves_optional_inputs_without_blocking(self):
         skill = read("skills/author-reviewable-text/SKILL.md")
+        input_contract = skill[skill.index("## 입력 계약"):skill.index("## 적용 범위")]
+        self.assertNotIn("voice profile", input_contract)
         primary = skill.index("$AGENT_ORCHESTRATION_HOME/voice-profile.md")
         fallback = skill.index("~/.agent-orchestration/voice-profile.md")
         self.assertLess(primary, fallback)
         for phrase in (
             "직접 확인",
+            "환경 변수가 설정되어 있으면",
+            "환경 변수가 없을 때만",
             "정확한 skill 이름",
             "실패 원인",
             "호출자에게 보고",
             "작성을 차단하지 않는다",
         ):
             self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_expands_required_format_priority(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        priority = skill[skill.index("## 우선순위"):skill.index("## 작성 절차")]
+        self.assertRegex(
+            priority,
+            r"(?m)^2\. 템플릿, 필수 절 또는 내용, 길이 제한을 포함한 산출물의 필수 형식$",
+        )
+
+    def test_author_reviewable_text_gathers_rules_before_single_draft(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        gather_phrase = "작성 규칙을 먼저 수집"
+        draft_phrase = "수집한 모든 규칙을 사용해"
+        self.assertIn(gather_phrase, workflow)
+        self.assertIn(draft_phrase, workflow)
+        gather = workflow.index(gather_phrase)
+        draft = workflow.index(draft_phrase)
+        self.assertLess(gather, draft)
+        self.assertIn("최종 초안을 한 번 작성", workflow)
+        self.assertIn("작업 중인 초안을 순차적으로 다시 쓰거나 다듬지 않는다", workflow)
+        for forbidden in ("작업 중인 문안을 다듬는다", "그 결과의 군더더기를 줄인다"):
+            self.assertNotIn(forbidden, workflow)
 
     def test_author_reviewable_text_preserves_literals_and_length(self):
         skill = read("skills/author-reviewable-text/SKILL.md")
