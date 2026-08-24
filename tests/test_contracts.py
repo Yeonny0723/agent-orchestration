@@ -123,6 +123,48 @@ class SkillContractTests(unittest.TestCase):
         for forbidden in ("작업 중인 문안을 다듬는다", "그 결과의 군더더기를 줄인다"):
             self.assertNotIn(forbidden, workflow)
 
+    def test_author_reviewable_text_invokes_installed_skills_before_drafting(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        stages = ("### 입력 확인", "### 선택 skill 호출", "### 초안 작성", "### 반환")
+        for stage in stages:
+            self.assertIn(stage, workflow)
+        positions = [workflow.index(stage) for stage in stages]
+        self.assertEqual(sorted(positions), positions)
+
+        optional = workflow[positions[1]:positions[2]]
+        for name in ("humanizer", "stop-slop"):
+            heading = f"#### `{name}`"
+            self.assertIn(heading, optional)
+            start = optional.index(heading)
+            end = optional.find("#### ", start + len(heading))
+            subsection = optional[start:] if end < 0 else optional[start:end]
+            for phrase in ("설치", "호출", "확인된 사실", "필수 형식", "전달"):
+                self.assertIn(phrase, subsection, name)
+
+    def test_author_reviewable_text_keeps_failures_and_missing_input_outside_draft(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        for stage in ("### 입력 확인", "### 선택 skill 호출", "### 초안 작성"):
+            self.assertIn(stage, workflow)
+        input_check = workflow[workflow.index("### 입력 확인"):workflow.index("### 선택 skill 호출")]
+        for phrase in ("누락된 입력 목록", "초안을 작성하지", "사용자에게 직접 묻지", "호출자에게 반환"):
+            self.assertIn(phrase, input_check)
+
+        optional = workflow[workflow.index("### 선택 skill 호출"):workflow.index("### 초안 작성")]
+        for phrase in (
+            "설치되지 않",
+            "조용히 계속",
+            "설치된 skill",
+            "호출하거나 읽을 수 없",
+            "정확한 skill 이름",
+            "실패 원인",
+            "별도로 반환",
+            "초안에 포함하지",
+            "작성을 계속",
+        ):
+            self.assertIn(phrase, optional)
+
     def test_author_reviewable_text_preserves_literals_and_length(self):
         skill = read("skills/author-reviewable-text/SKILL.md")
         for phrase in (
