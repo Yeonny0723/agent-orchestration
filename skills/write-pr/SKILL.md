@@ -22,7 +22,7 @@ description: 구현이 끝난 현재 저장소에서 승인된 spec과 실제 di
 
 ## 작성과 provider 감지
 
-1. `$AGENT_ORCHESTRATION_HOME/voice-profile.md` 또는 `~/.agent-orchestration/voice-profile.md`를 읽는다. 없으면 기본 한국어 문체로 계속하며 차단하지 않는다.
+1. `author-reviewable-text`에 산출물 종류가 PR·MR 제목과 본문임을 밝히고 PR 템플릿과 필수 형식, 승인된 spec·실제 diff·검증 결과인 확인된 사실, provider의 길이 제한과 target branch 등 사용자 옵션을 전달한다. 반환된 한국어 제목과 본문 최종 초안을 사용한다.
 2. 시간순 작업 로그나 폐기한 시행착오 대신 최종 상태를 설명한다.
 3. 한국어 제목과 본문에 문제 배경, 목적, 주요 결정과 이유, 실제 변경, 검증 명령과 결과, 남은 위험을 포함한다.
 4. 실행 근거 없이 테스트 성공을 주장하지 않는다.

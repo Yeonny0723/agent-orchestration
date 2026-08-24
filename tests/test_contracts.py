@@ -303,13 +303,44 @@ class SkillContractTests(unittest.TestCase):
         for skill in ("commit-changes", "write-issue", "post-git-comment", "write-pr"):
             self.assertEqual(1, len(re.findall(rf"^## `{skill}`$", text, re.MULTILINE)))
 
-    def test_voice_profile_is_shared_by_user_facing_skills(self):
-        for name in ("orchestrate-work", "decision-first-grill", "implement-with-tdd", "understand-work", "write-pr"):
+    def test_reviewable_text_authoring_is_centralized_and_scoped(self):
+        included = (
+            "decision-first-grill",
+            "orchestrate-work",
+            "write-issue",
+            "post-git-comment",
+            "write-pr",
+            "understand-work",
+        )
+        for name in included:
             text = read(f"skills/{name}/SKILL.md")
-            self.assertIn("voice-profile.md", text, name)
-            self.assertIn("차단", text, name)
-        profile = read("templates/voice-profile.md")
-        self.assertEqual(10, len(re.findall(r"^## [0-9]+\.", profile, re.MULTILINE)))
+            self.assertEqual(1, text.count("author-reviewable-text"), name)
+            for phrase in ("산출물 종류", "확인된 사실", "필수 형식", "길이 제한", "반환된"):
+                self.assertIn(phrase, text, name)
+
+        for name in ("commit-changes", "implement-with-tdd"):
+            self.assertNotIn("author-reviewable-text", read(f"skills/{name}/SKILL.md"), name)
+
+        direct_voice_readers = {
+            path.parent.name
+            for path in (ROOT / "skills").glob("*/SKILL.md")
+            if "voice-profile.md" in path.read_text(encoding="utf-8")
+        }
+        self.assertEqual(
+            {"author-reviewable-text", "capture-authoring-voice"},
+            direct_voice_readers,
+        )
+
+        boundaries = {
+            "decision-first-grill": "승인을 받는다",
+            "orchestrate-work": "승인 게이트로 만들지는 않는다",
+            "write-issue": "승인 전에는 issue",
+            "post-git-comment": "승인 전에는 코멘트",
+            "write-pr": "승인 전에는 push",
+            "understand-work": "답변 뒤의 기술적 피드백",
+        }
+        for name, phrase in boundaries.items():
+            self.assertIn(phrase, read(f"skills/{name}/SKILL.md"), name)
 
     def test_setup_is_interactive_and_never_overwrites_conflicts(self):
         text = read("skills/setup-orchestration/SKILL.md")
