@@ -14,6 +14,7 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 - 테스트가 실제 변경 행위를 감지하는지에 대한 민감도 근거
 - 사용자가 현재 변경을 설명하고 문제 발생 시 수정 위치를 판단할 수 있는지
 - 실제 spec, diff와 검증 근거에 기반한 PR/MR 설명
+- 사람의 문체와 사용자의 문체로 리뷰를 맡겨 검토 과정을 빠르게 진행하는 것
 
 ## 기본 워크플로우
 
@@ -29,14 +30,6 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
   -> PR/MR 작성
 ```
 
-### 사용자 승인 경계
-
-- spec은 필요한 의사결정을 모두 확정한 뒤 작성하며, 작성 후 사용자가 승인해야 plan으로 진행합니다.
-- plan 자체는 사용자가 리뷰하지 않습니다. plan을 작성하면서 구현 수준의 합의가 필요한 내용만 질문합니다.
-- TDD 구현과 테스트 민감도 검증은 독립적으로 직접 호출할 수 있습니다.
-- 작업 이해 세션은 사용자가 명시적으로 호출할 때만 실행하며, 최대 5개의 질문으로 현재 변경에 대한 이해를 확인합니다. PR을 차단하는 게이트는 아닙니다.
-- PR/MR 작성도 사용자가 원하는 Codex, Claude Code 또는 호환 agent 세션에서 명시적으로 호출합니다.
-
 ## 주요 진입점
 
 ### 자동 오케스트레이션
@@ -51,29 +44,9 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 
 예상 시간이나 파일 수만으로 판정하지 않습니다. 공개 계약, 데이터 소유권, 운영 경계 또는 독립 검증 단위가 나뉘면 더 큰 규모로 올립니다.
 
-### 독립 호출 skill
+### 문체 처리
 
-- `decision-first-grill`: spec 작성에 필요한 결정을 하나씩 확정
-- `implement-with-tdd`: 승인된 spec과 plan을 기준으로 테스트 우선 구현
-- `verify-test-sensitivity`: 작은 행위 결함을 주입해 관련 테스트의 감지 여부 확인
-- `understand-work`: 실제 spec과 diff를 바탕으로 최대 5개의 이해 질문 진행
-- `write-pr`: 실제 diff와 최종 검증 근거를 재확인해 한국어 PR/MR 초안 작성
-- `apply-conventions`: 언어·프레임워크별 convention pack 선택 및 적용
-- `setup-orchestration`: Codex·Claude Code와 외부 skill 의존성 설치 상태 점검
-
-## Git 커맨드
-
-Git 관련 기능은 얇은 command가 대응 skill에 1:1로 위임합니다.
-
-| 커맨드 | 위임 skill | 동작 |
-| --- | --- | --- |
-| `/git:commit` | `commit-changes` | 원자적 커밋 계획을 제시하고 승인 후 로컬 커밋 |
-| `/git:issue` | `write-issue` | GitHub Issue 또는 GitLab Issue 초안 작성 및 승인 후 생성 |
-| `/git:comment` | `post-git-comment` | Issue·PR·MR 코멘트 초안 작성 및 승인 후 게시 |
-| `/git:pr` | `write-pr` | spec·diff·검증 근거 기반 PR/MR 작성 및 승인 후 생성 |
-
-provider는 `origin` remote와 CLI 상태를 기준으로 GitHub 또는 GitLab을 자동 감지합니다. 감지할 수 없거나 모호하면 외부 쓰기를 실행하지 않습니다. push, commit, issue/comment/PR 생성은 초안과 실행 명령을 보여준 뒤 승인받아 수행합니다.
-
+사용자 검토 대상 글은 `author-reviewable-text`를 통해 작성하며, `capture-authoring-voice`의 사용자 문체와 설치된 선택형 `stop-slop`·`humanizer`를 반영합니다.
 
 ## 디렉터리 구조
 
@@ -86,6 +59,19 @@ provider는 `origin` remote와 CLI 상태를 기준으로 GitHub 또는 GitLab�
 ├── docs/                 # 확정된 spec과 plan
 ├── scripts/              # 설치, mutation 복원, plugin 검증 도구
 ├── skills/               # Codex·Claude Code 공용 skill
+│   ├── apply-conventions/       # 언어·프레임워크별 convention pack 선택 및 적용
+│   ├── author-reviewable-text/  # 사용자 검토 대상 글의 최종 초안 작성
+│   ├── capture-authoring-voice/ # 사용자 문체 프로파일 수집 및 저장
+│   ├── commit-changes/          # 원자적 커밋 계획과 커밋 메시지 작성
+│   ├── decision-first-grill/    # spec 작성에 필요한 의사결정 확정
+│   ├── implement-with-tdd/      # 테스트 우선 구현과 검증
+│   ├── orchestrate-work/        # 작업 규모에 따른 개발 워크플로우 조합
+│   ├── post-git-comment/        # Git Issue·PR·MR 코멘트 작성 및 게시
+│   ├── setup-orchestration/     # 플러그인과 외부 skill 의존성 설치
+│   ├── understand-work/         # 현재 변경을 이해하기 위한 질문 진행
+│   ├── verify-test-sensitivity/ # 테스트의 변경 감지 여부 검증
+│   ├── write-issue/             # GitHub·GitLab Issue 작성 및 게시
+│   └── write-pr/                # GitHub·GitLab PR·MR 작성 및 게시
 ├── templates/            # spec, plan, 검증 근거 등의 문서 템플릿
 └── tests/                # 계약·인수·스크립트 테스트
 ```
@@ -108,30 +94,10 @@ codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestra
 codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
 
-설치 후 새 Claude Code 또는 Codex thread를 시작합니다. 업데이트할 때는 marketplace source의 변경사항을 갱신한 뒤 각 호스트의 plugin update/install 명령을 사용합니다. 외부 skill 의존성까지 점검하려면 `setup-orchestration` skill을 별도로 호출합니다.
-
-설치 과정은 다음 외부 skill을 확인하고, 사용자 범위의 충돌을 덮어쓰지 않습니다.
+의존성:
 
 - `superpowers`
 - `grill-with-docs`
 - `domain-modeling`
-
-사용자 convention은 필요할 때만 선택해 적용합니다. Python과 TypeScript 규칙은 각각 `conventions/python/`, `conventions/typescript/`에 있으며 React 규칙은 `conventions/react.md`에 있습니다.
-
-## 검증
-
-저장소 루트에서 실행합니다.
-
-```powershell
-python -m unittest discover -s tests -v
-python scripts/validate_plugin.py .
-```
-
-첫 번째 명령은 계약·인수·스크립트 테스트를 실행하고, 두 번째 명령은 양쪽 manifest, skill metadata, command 위임과 참조 파일의 구조를 검사합니다.
-
-## 범위 원칙
-
-- PR 지식 패킷이나 별도 작업 로그를 만들지 않습니다. PR 작성 agent가 승인된 spec, 실제 diff와 최종 검증 근거를 직접 읽습니다.
-- 작업 이해 세션의 답변은 조직용 산출물이나 영구 학습 기록으로 저장하지 않습니다.
-- command에 워크플로우 로직을 넣지 않습니다. provider 감지와 상태 전이는 대응 skill이 담당합니다.
-- TDD 구현, 테스트 민감도 검증, 작업 이해 세션과 PR 작성은 필요할 때 사용자가 독립적으로 호출할 수 있습니다.
+- 선택형 `stop-slop`
+- 선택형 `humanizer`
