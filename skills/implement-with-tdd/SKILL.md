@@ -28,7 +28,3 @@ description: 승인된 spec과 해당 plan이 준비된 기능 개발, 버그 �
 ## 책임 경계
 
 규모 판정, spec 의사결정, 테스트 mutation, 작업 이해 질문, PR 작성 또는 PR 생성 절차를 이 skill에 복제하지 않는다.
-
-## 문체
-
-사용자 대면 질문과 결과는 `$AGENT_ORCHESTRATION_HOME/voice-profile.md` 또는 `~/.agent-orchestration/voice-profile.md`를 문체에만 적용한다. 프로파일이 없어도 차단하지 않는다.

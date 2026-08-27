@@ -11,6 +11,12 @@ def read(relative: str) -> str:
     return (ROOT / relative).read_text(encoding="utf-8")
 
 
+def section(text: str, heading: str) -> str:
+    start = text.index(f"## {heading}")
+    end = text.find("\n## ", start + len(heading) + 3)
+    return text[start:] if end < 0 else text[start:end]
+
+
 class WorkflowContractTests(unittest.TestCase):
     def test_scale_cases_cover_all_sizes(self):
         cases = json.loads(read("tests/fixtures/work-scale-cases.json"))
@@ -43,11 +49,29 @@ class WorkflowContractTests(unittest.TestCase):
 
 
 class SkillContractTests(unittest.TestCase):
+    def assert_pr_authoring_prerequisites(self, skill: str):
+        authoring = section(skill, "작성과 provider 감지")
+        author = authoring.index("`author-reviewable-text`")
+        prerequisites = (
+            "GitHub, host가 GitLab이거나 `glab repo view`만 성공하면 GitLab으로 판정한다",
+            "필요한 `gh` 또는 `glab` CLI와 인증 상태를 확인",
+            "provider를 감지할 수 없거나 둘 다 성공하면 외부 생성은 중단하고 사용자에게 확인한다",
+        )
+        for prerequisite in prerequisites:
+            self.assertLess(authoring.index(prerequisite), author, prerequisite)
+
+    def assert_plan_consensus_precedes_authoring(self, skill: str):
+        plan = section(skill, "plan 작성")
+        consensus = plan.index("계획 기술 합의가 끝나면")
+        author = plan.index("`author-reviewable-text`")
+        self.assertLess(consensus, author)
+
     def test_required_skills_have_metadata(self):
         required = {
             "setup-orchestration",
             "orchestrate-work",
             "capture-authoring-voice",
+            "author-reviewable-text",
             "decision-first-grill",
             "apply-conventions",
             "implement-with-tdd",
@@ -66,6 +90,130 @@ class SkillContractTests(unittest.TestCase):
             self.assertRegex(skill, r"(?m)^description: .+$")
             for key in ("display_name", "short_description", "default_prompt"):
                 self.assertRegex(metadata, rf"(?m)^\s*{key}: .+$")
+
+    def test_author_reviewable_text_preserves_content_contract(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "최종 초안을 한 번",
+            "stop-slop",
+            "humanizer",
+            "선택형",
+            "차단하지 않는다",
+            "사용자의 명시적 지시",
+            "필수 형식",
+            "확인된 사실",
+        ):
+            self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_resolves_optional_inputs_without_blocking(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        input_contract = skill[skill.index("## 입력 계약"):skill.index("## 적용 범위")]
+        self.assertNotIn("voice profile", input_contract)
+        primary = skill.index("$AGENT_ORCHESTRATION_HOME/voice-profile.md")
+        fallback = skill.index("~/.agent-orchestration/voice-profile.md")
+        self.assertLess(primary, fallback)
+        for phrase in (
+            "직접 확인",
+            "환경 변수가 설정되어 있으면",
+            "환경 변수가 없을 때만",
+            "정확한 skill 이름",
+            "실패 원인",
+            "호출자에게 보고",
+            "작성을 차단하지 않는다",
+        ):
+            self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_expands_required_format_priority(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        priority = skill[skill.index("## 우선순위"):skill.index("## 작성 절차")]
+        self.assertRegex(
+            priority,
+            r"(?m)^2\. 템플릿, 필수 절 또는 내용, 길이 제한을 포함한 산출물의 필수 형식$",
+        )
+
+    def test_author_reviewable_text_gathers_rules_before_single_draft(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        gather_phrase = "작성 규칙을 먼저 수집"
+        draft_phrase = "수집한 모든 규칙을 사용해"
+        self.assertIn(gather_phrase, workflow)
+        self.assertIn(draft_phrase, workflow)
+        gather = workflow.index(gather_phrase)
+        draft = workflow.index(draft_phrase)
+        self.assertLess(gather, draft)
+        self.assertIn("최종 초안을 한 번 작성", workflow)
+        self.assertIn("작업 중인 초안을 순차적으로 다시 쓰거나 다듬지 않는다", workflow)
+        for forbidden in ("작업 중인 문안을 다듬는다", "그 결과의 군더더기를 줄인다"):
+            self.assertNotIn(forbidden, workflow)
+
+    def test_author_reviewable_text_invokes_installed_skills_before_drafting(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        stages = ("### 입력 확인", "### 선택 skill 호출", "### 초안 작성", "### 반환")
+        for stage in stages:
+            self.assertIn(stage, workflow)
+        positions = [workflow.index(stage) for stage in stages]
+        self.assertEqual(sorted(positions), positions)
+
+        optional = workflow[positions[1]:positions[2]]
+        for name in ("humanizer", "stop-slop"):
+            heading = f"#### `{name}`"
+            self.assertIn(heading, optional)
+            start = optional.index(heading)
+            end = optional.find("#### ", start + len(heading))
+            subsection = optional[start:] if end < 0 else optional[start:end]
+            for phrase in ("설치", "호출", "확인된 사실", "필수 형식", "전달"):
+                self.assertIn(phrase, subsection, name)
+
+    def test_author_reviewable_text_keeps_failures_and_missing_input_outside_draft(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        workflow = skill[skill.index("## 작성 절차"):skill.index("## 결과")]
+        for stage in ("### 입력 확인", "### 선택 skill 호출", "### 초안 작성"):
+            self.assertIn(stage, workflow)
+        input_check = workflow[workflow.index("### 입력 확인"):workflow.index("### 선택 skill 호출")]
+        for phrase in ("누락된 입력 목록", "초안을 작성하지", "사용자에게 직접 묻지", "호출자에게 반환"):
+            self.assertIn(phrase, input_check)
+
+        optional = workflow[workflow.index("### 선택 skill 호출"):workflow.index("### 초안 작성")]
+        for phrase in (
+            "설치되지 않",
+            "조용히 계속",
+            "설치된 skill",
+            "호출하거나 읽을 수 없",
+            "정확한 skill 이름",
+            "실패 원인",
+            "별도로 반환",
+            "초안에 포함하지",
+            "작성을 계속",
+        ):
+            self.assertIn(phrase, optional)
+
+    def test_author_reviewable_text_preserves_literals_and_length(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "길이 제한",
+            "필수 절",
+            "숫자",
+            "파일명",
+            "명령어",
+            "선택지",
+            "차이",
+            "판단 기준",
+            "인용문",
+            "사용자가 제공한 인용문은 다시 쓰지 않는다",
+        ):
+            self.assertIn(phrase, skill)
+
+    def test_author_reviewable_text_keeps_caller_ownership_and_narrow_scope(self):
+        skill = read("skills/author-reviewable-text/SKILL.md")
+        for phrase in (
+            "호출자에게 반환",
+            "호출자가 승인",
+            "외부 쓰기",
+            "일반적인 선택형 질문",
+            "`understand-work` 질문",
+        ):
+            self.assertIn(phrase, skill)
 
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
@@ -105,6 +253,63 @@ class SkillContractTests(unittest.TestCase):
             self.assertIn(phrase, text)
         self.assertIn("특정 호스트", text)
         self.assertIn("understand-work 실행 여부와 무관", text)
+
+    def test_pr_detects_provider_before_authoring_and_keeps_write_order(self):
+        skill = read("skills/write-pr/SKILL.md")
+        authoring = section(skill, "작성과 provider 감지")
+        approval = section(skill, "승인과 생성")
+
+        provider = authoring.index("git remote get-url origin")
+        author = authoring.index("`author-reviewable-text`")
+        returned_draft = authoring.index("반환된 한국어 제목과 본문 최종 초안")
+        approval_gate = approval.index("사용자 승인을 받는다")
+        external_write = approval.index("git push -u origin HEAD")
+        self.assertLess(provider, author)
+        self.assert_pr_authoring_prerequisites(skill)
+        self.assertLess(author, returned_draft)
+        self.assertLess(approval_gate, external_write)
+        self.assertLess(skill.index("반환된 한국어 제목과 본문 최종 초안"), skill.index("## 승인과 생성"))
+
+        for phrase in ("provider의 길이 제한", "target branch 등 사용자 옵션"):
+            self.assertIn(phrase, authoring)
+        for phrase in ("사용자 승인을 받는다", "승인 전에는", "git push -u origin HEAD"):
+            self.assertIn(phrase, approval)
+
+    def test_pr_authoring_order_assertions_reject_each_weakened_prerequisite(self):
+        skill = read("skills/write-pr/SKILL.md")
+        author = "`author-reviewable-text`"
+        prerequisites = (
+            "GitHub, host가 GitLab이거나 `glab repo view`만 성공하면 GitLab으로 판정한다",
+            "필요한 `gh` 또는 `glab` CLI와 인증 상태를 확인",
+            "provider를 감지할 수 없거나 둘 다 성공하면 외부 생성은 중단하고 사용자에게 확인한다",
+        )
+        without_author = skill.replace(author, "author-reviewable-text", 1)
+        for prerequisite in prerequisites:
+            with self.subTest(prerequisite=prerequisite):
+                weakened = without_author.replace(prerequisite, f"{author} {prerequisite}", 1)
+                with self.assertRaises(AssertionError):
+                    self.assert_pr_authoring_prerequisites(weakened)
+
+    def test_orchestrate_plan_authoring_passes_only_confirmed_technology_decisions(self):
+        skill = read("skills/orchestrate-work/SKILL.md")
+        plan = section(skill, "plan 작성")
+        self.assert_plan_consensus_precedes_authoring(skill)
+        self.assertIn("승인된 spec과 확정된 기술 결정인 확인된 사실", plan)
+        self.assertIn("확정된 기술 결정만 전달", plan)
+        self.assertIn("일반적인 기술 선택을 추가하거나 대안이나 새로운 선택지를 다시 열지 않는다", plan)
+        self.assertNotIn("길이 제한과 기술 선택지를 전달", plan)
+
+    def test_orchestrate_plan_order_assertion_rejects_authoring_before_consensus(self):
+        skill = read("skills/orchestrate-work/SKILL.md")
+        author = "`author-reviewable-text`"
+        consensus = "계획 기술 합의가 끝나면"
+        weakened = skill.replace(author, "author-reviewable-text", 1).replace(
+            consensus,
+            f"{author} {consensus}",
+            1,
+        )
+        with self.assertRaises(AssertionError):
+            self.assert_plan_consensus_precedes_authoring(weakened)
 
     def test_git_commands_delegate_one_to_one_without_business_logic(self):
         commands = {
@@ -178,13 +383,39 @@ class SkillContractTests(unittest.TestCase):
         for skill in ("commit-changes", "write-issue", "post-git-comment", "write-pr"):
             self.assertEqual(1, len(re.findall(rf"^## `{skill}`$", text, re.MULTILINE)))
 
-    def test_voice_profile_is_shared_by_user_facing_skills(self):
-        for name in ("orchestrate-work", "decision-first-grill", "implement-with-tdd", "understand-work", "write-pr"):
+    def test_reviewable_text_authoring_is_centralized_and_scoped(self):
+        included = {
+            "decision-first-grill": ("spec 작성", "spec 작성", "승인을 받는다"),
+            "orchestrate-work": ("plan 작성", "plan 작성", "승인 게이트로 만들지는 않는다"),
+            "write-issue": ("초안 작성", "승인과 생성", "승인 전에는 issue"),
+            "post-git-comment": ("초안과 승인", "초안과 승인", "승인 전에는 코멘트"),
+            "write-pr": ("작성과 provider 감지", "승인과 생성", "승인 전에는 push"),
+            "understand-work": ("질문 작성", "질문 작성", "답변 뒤의 기술적 피드백"),
+        }
+        for name, (author_heading, boundary_heading, boundary_phrase) in included.items():
             text = read(f"skills/{name}/SKILL.md")
-            self.assertIn("voice-profile.md", text, name)
-            self.assertIn("차단", text, name)
-        profile = read("templates/voice-profile.md")
-        self.assertEqual(10, len(re.findall(r"^## [0-9]+\.", profile, re.MULTILINE)))
+            self.assertEqual(1, text.count("author-reviewable-text"), name)
+            authoring = section(text, author_heading)
+            boundary = section(text, boundary_heading)
+            self.assertEqual(1, authoring.count("author-reviewable-text"), name)
+            self.assertIn("반환된", authoring, name)
+            self.assertIn(boundary_phrase, boundary, name)
+            self.assertLess(text.index("반환된", text.index("author-reviewable-text")), text.index(boundary_phrase), name)
+            for phrase in ("산출물 종류", "확인된 사실", "필수 형식", "길이 제한", "반환된"):
+                self.assertIn(phrase, authoring, name)
+
+        for name in ("commit-changes", "implement-with-tdd"):
+            self.assertNotIn("author-reviewable-text", read(f"skills/{name}/SKILL.md"), name)
+
+        direct_voice_readers = {
+            path.parent.name
+            for path in (ROOT / "skills").glob("*/SKILL.md")
+            if "voice-profile.md" in path.read_text(encoding="utf-8")
+        }
+        self.assertEqual(
+            {"author-reviewable-text", "capture-authoring-voice"},
+            direct_voice_readers,
+        )
 
     def test_setup_is_interactive_and_never_overwrites_conflicts(self):
         text = read("skills/setup-orchestration/SKILL.md")
@@ -192,6 +423,29 @@ class SkillContractTests(unittest.TestCase):
             self.assertIn(dependency, text)
         for phrase in ("항목별 승인", "사용자 범위", "directory junction", "symbolic link", "덮어쓰지"):
             self.assertIn(phrase, text)
+
+    def test_setup_offers_optional_authoring_skills_without_blocking(self):
+        text = read("skills/setup-orchestration/SKILL.md")
+        for dependency in ("stop-slop", "humanizer"):
+            self.assertIn(dependency, text)
+        for command in (
+            "npx skills add hardikpandya/stop-slop --global --skill stop-slop",
+            "npx skills add blader/humanizer --global --skill humanizer",
+        ):
+            self.assertIn(command, text)
+        for phrase in (
+            "선택형",
+            "둘 다 선택하지",
+            "자동 업데이트하지 않는다",
+            "작업을 차단하지 않는다",
+            "다른 원본",
+        ):
+            self.assertIn(phrase, text)
+        for path in (
+            "skills/setup-orchestration/SKILL.md",
+            "skills/author-reviewable-text/SKILL.md",
+        ):
+            self.assertNotIn("unslop", read(path), path)
 
 
 class ConventionContractTests(unittest.TestCase):

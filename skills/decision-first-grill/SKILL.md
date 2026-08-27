@@ -25,6 +25,6 @@ brainstorming에서 spec의 범위, 외부 행위, 공개 계약, 보안, 운영
 
 결정 배경과 이유는 spec에 둔다. `CONTEXT.md`에는 용어만 두고, 여러 작업에 영향을 주며 대안과 장기 결과가 있는 결정만 ADR 후보로 처리한다.
 
-## 문체
+## spec 작성
 
-질문 전에 `$AGENT_ORCHESTRATION_HOME/voice-profile.md` 또는 `~/.agent-orchestration/voice-profile.md`를 읽는다. 프로파일은 질문 문체에만 적용하고 선택지 구조나 판단 계약을 바꾸지 않는다. 파일이 없어도 차단하지 않는다.
+모든 결정이 확정된 뒤 `author-reviewable-text`에 산출물 종류가 spec임을 밝히고 spec 템플릿과 필수 형식, 확정된 결정과 근거인 확인된 사실, 해당되는 길이 제한과 사용자 지시를 전달한다. 반환된 spec을 사용자에게 제시하고 승인을 받는다. 공통 작성 skill은 질문 루프의 선택지나 판단 계약에는 적용하지 않는다.
