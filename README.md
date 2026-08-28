@@ -67,6 +67,7 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 │   ├── implement-with-tdd/      # 테스트 우선 구현과 검증
 │   ├── orchestrate-work/        # 작업 규모에 따른 개발 워크플로우 조합
 │   ├── post-git-comment/        # Git Issue·PR·MR 코멘트 작성 및 게시
+│   ├── review-comment/          # 새 GitHub PR·GitLab MR 리뷰 코멘트 반영
 │   ├── setup-orchestration/     # 플러그인과 외부 skill 의존성 설치
 │   ├── understand-work/         # 현재 변경을 이해하기 위한 질문 진행
 │   ├── verify-test-sensitivity/ # 테스트의 변경 감지 여부 검증

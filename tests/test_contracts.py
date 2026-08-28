@@ -80,6 +80,7 @@ class SkillContractTests(unittest.TestCase):
             "commit-changes",
             "write-issue",
             "post-git-comment",
+            "review-comment",
             "write-pr",
         }
         self.assertEqual(required, {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")})
