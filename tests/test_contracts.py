@@ -80,6 +80,7 @@ class SkillContractTests(unittest.TestCase):
             "commit-changes",
             "write-issue",
             "post-git-comment",
+            "review-comment",
             "write-pr",
         }
         self.assertEqual(required, {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")})
@@ -475,6 +476,30 @@ class ConventionContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
+    def test_general_pack_covers_readability_and_boundary_rules(self):
+        text = read("conventions/general.md")
+        for phrase in (
+            "insertion_anchor_unit",
+            "transform_relative_target_to_absolute",
+            "객체를 수정하지 않는다",
+            "is_table_replacement",
+            "복잡한 comprehension",
+            "row_edits",
+            "DTO·프롬프트·서비스",
+            "병렬 목록은 `zip()`으로 조용히 잘라내지 않는다",
+            "설명용 예시",
+            "같은 프롬프트 규칙",
+            "존재 이유와 제약",
+            "대칭적인 구현",
+            "전체 테스트를 실행한다",
+            "DTO나 dataclass",
+            "필드별 역할",
+            "하나의 객체로 export",
+            "클래스 주석",
+            "명사형으로 작성",
+        ):
+            self.assertIn(phrase, text)
+
     def test_react_pack_distinguishes_user_facing_errors(self):
         text = read("conventions/react.md")
         self.assertIn("사용자에게 노출할 오류", text)
@@ -501,6 +526,36 @@ class AcceptanceContractTests(unittest.TestCase):
         for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, cases)
             self.assertIn(command, expected)
+
+
+class MarketplaceReleaseContractTests(unittest.TestCase):
+    def test_readme_uses_public_marketplace_source(self):
+        text = read("README.md")
+        self.assertIn("https://github.com/Yeonny0723/agent-orchestration.git", text)
+        self.assertIn("Yeonny0723/agent-orchestration", text)
+        self.assertNotIn("C:\\Users\\<사용자>", text)
+        self.assertNotIn("orca\\projects\\agent-orchestration", text)
+
+    def test_release_instructions_accept_a_requested_branch(self):
+        text = read("scripts/README.md")
+        self.assertIn(".\\scripts\\redeploy-plugin.ps1 -Branch feature/review-comment", text)
+        self.assertIn("origin/<branch>", text)
+        self.assertIn("redeploy-plugin.ps1", text)
+
+    def test_user_installation_can_pin_a_marketplace_branch(self):
+        text = read("README.md")
+        self.assertIn("--ref <branch>", text)
+        self.assertIn("#<branch>", text)
+
+    def test_release_script_is_tracked(self):
+        self.assertTrue((ROOT / "scripts/redeploy-plugin.ps1").is_file())
+
+    def test_user_updates_do_not_require_clone_or_pull(self):
+        text = read("README.md")
+        self.assertIn("codex plugin marketplace upgrade", text)
+        self.assertIn("claude plugin marketplace update", text)
+        self.assertNotIn("git clone", text)
+        self.assertNotIn("git pull", text)
 
 
 if __name__ == "__main__":

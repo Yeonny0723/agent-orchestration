@@ -67,6 +67,7 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 │   ├── implement-with-tdd/      # 테스트 우선 구현과 검증
 │   ├── orchestrate-work/        # 작업 규모에 따른 개발 워크플로우 조합
 │   ├── post-git-comment/        # Git Issue·PR·MR 코멘트 작성 및 게시
+│   ├── review-comment/          # 새 GitHub PR·GitLab MR 리뷰 코멘트 반영
 │   ├── setup-orchestration/     # 플러그인과 외부 skill 의존성 설치
 │   ├── understand-work/         # 현재 변경을 이해하기 위한 질문 진행
 │   ├── verify-test-sensitivity/ # 테스트의 변경 감지 여부 검증
@@ -76,23 +77,39 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 └── tests/                # 계약·인수·스크립트 테스트
 ```
 
-## 설치와 의존성
+## 설치와 업데이트
 
-플러그인 원본을 Codex와 Claude Code에서 사용자 전역 plugin으로 설치하려면 저장소 경로를 각 호스트의 marketplace로 등록한 뒤 plugin을 설치합니다. 이 저장소는 현재 root 자체를 plugin source로 가리키는 marketplace manifest를 제공합니다.
+공개 GitHub marketplace에서 설치하므로 사용자는 이 저장소를 clone하거나 pull할 필요가 없습니다. 기본 배포 브랜치는 `master`이며, 다른 브랜치를 시험할 때는 설치 명령의 branch 값을 바꿉니다.
 
 Claude Code:
 
 ```powershell
-claude plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration" --scope user
+claude plugin marketplace add "https://github.com/Yeonny0723/agent-orchestration.git#master" --scope user
 claude plugin install agent-orchestration@agent-orchestration-marketplace --scope user
 ```
 
 Codex:
 
 ```powershell
-codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration"
+codex plugin marketplace add Yeonny0723/agent-orchestration --ref master
 codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
+
+다른 브랜치를 설치하려면 Claude Code는 Git URL 뒤의 `#<branch>`를, Codex는 `--ref <branch>`를 같은 브랜치 이름으로 바꿉니다. 예를 들어 `feature/review-comment` 브랜치는 각각 `...git#feature/review-comment`, `--ref feature/review-comment`로 지정합니다.
+
+업데이트:
+
+```powershell
+claude plugin marketplace update agent-orchestration-marketplace
+claude plugin update agent-orchestration@agent-orchestration-marketplace --scope user
+
+codex plugin marketplace upgrade agent-orchestration-marketplace
+codex plugin add agent-orchestration@agent-orchestration-marketplace
+```
+
+Codex에서는 `codex plugin marketplace upgrade` 후 `codex plugin add`가 plugin을 다시 등록·설치합니다.
+
+업데이트한 skill을 적용하려면 Codex 새 스레드 또는 Claude Code 재시작이 필요할 수 있습니다.
 
 의존성:
 

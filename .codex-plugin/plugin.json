@@ -1,20 +1,24 @@
 {
   "name": "agent-orchestration",
   "version": "0.1.1",
-  "description": "코딩 에이전트를 위한 규모별 기획, TDD 구현, 검증, 작업 이해, PR 워크플로우.",
+  "description": "\ucf54\ub529 \uc5d0\uc774\uc804\ud2b8\ub97c \uc704\ud55c \uaddc\ubaa8\ubcc4 \uae30\ud68d, TDD \uad6c\ud604, \uac80\uc99d, \uc791\uc5c5 \uc774\ud574, PR \uc6cc\ud06c\ud50c\ub85c\uc6b0.",
   "author": {
     "name": "kkjuyeon"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Agent Orchestration",
-    "shortDescription": "개발 작업의 기획, 구현, 검증과 PR 준비",
-    "longDescription": "작업 규모에 맞춰 spec 의사결정, TDD 구현, 테스트 민감도 검증, 선택형 작업 이해와 PR 작성을 Codex와 Claude Code에서 일관되게 운영합니다.",
+    "shortDescription": "\uac1c\ubc1c \uc791\uc5c5\uc758 \uae30\ud68d, \uad6c\ud604, \uac80\uc99d\uacfc PR \uc900\ube44",
+    "longDescription": "\uc791\uc5c5 \uaddc\ubaa8\uc5d0 \ub9de\ucdb0 spec \uc758\uc0ac\uacb0\uc815, TDD \uad6c\ud604, \ud14c\uc2a4\ud2b8 \ubbfc\uac10\ub3c4 \uac80\uc99d, \uc120\ud0dd\ud615 \uc791\uc5c5 \uc774\ud574\uc640 PR \uc791\uc131\uc744 Codex\uc640 Claude Code\uc5d0\uc11c \uc77c\uad00\ub418\uac8c \uc6b4\uc601\ud569\ub2c8\ub2e4.",
     "developerName": "kkjuyeon",
     "category": "Developer Tools",
-    "capabilities": ["Interactive", "Read", "Write"],
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
     "defaultPrompt": [
-      "이 개발 작업을 규모에 맞는 워크플로우로 진행해 주세요."
+      "\uc774 \uac1c\ubc1c \uc791\uc5c5\uc744 \uaddc\ubaa8\uc5d0 \ub9de\ub294 \uc6cc\ud06c\ud50c\ub85c\uc6b0\ub85c \uc9c4\ud589\ud574 \uc8fc\uc138\uc694."
     ]
   }
 }
