@@ -492,6 +492,11 @@ class ConventionContractTests(unittest.TestCase):
             "존재 이유와 제약",
             "대칭적인 구현",
             "전체 테스트를 실행한다",
+            "DTO나 dataclass",
+            "필드별 역할",
+            "하나의 객체로 export",
+            "클래스 주석",
+            "명사형으로 작성",
         ):
             self.assertIn(phrase, text)
 
@@ -542,8 +547,8 @@ class MarketplaceReleaseContractTests(unittest.TestCase):
         self.assertIn("--ref <branch>", text)
         self.assertIn("#<branch>", text)
 
-    def test_release_script_is_ignored(self):
-        self.assertIn("/scripts/redeploy-plugin.ps1", read(".gitignore"))
+    def test_release_script_is_tracked(self):
+        self.assertTrue((ROOT / "scripts/redeploy-plugin.ps1").is_file())
 
     def test_user_updates_do_not_require_clone_or_pull(self):
         text = read("README.md")

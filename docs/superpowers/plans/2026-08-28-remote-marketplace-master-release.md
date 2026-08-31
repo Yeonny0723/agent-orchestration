@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Publish any requested, already-pushed branch through the public GitHub marketplace so Codex and Claude Code users can install and update the plugin without cloning the repository, while keeping the maintainer's release script local-only.
+**Goal:** Publish any requested, already-pushed branch through the public GitHub marketplace so Codex and Claude Code users can install and update the plugin without cloning the repository, while keeping the branch-aware release script versioned for maintainers.
 
-**Architecture:** The GitHub repository is the remote marketplace source for both hosts. A local-only PowerShell script accepts a branch, validates the checked-out branch against its matching `origin/<branch>` ref, validates the plugin, and refreshes the maintainer's Codex and Claude Code marketplace installations from that branch. User-facing installation and update commands live in `README.md`; maintainer release instructions live in tracked `scripts/README.md`.
+**Architecture:** The GitHub repository is the remote marketplace source for both hosts. A versioned PowerShell script accepts a branch, validates the checked-out branch against its matching `origin/<branch>` ref, validates the plugin, and refreshes the maintainer's Codex and Claude Code marketplace installations from that branch. User-facing installation and update commands live in `README.md`; maintainer release instructions live in tracked `scripts/README.md`.
 
 **Tech Stack:** PowerShell, Codex plugin CLI, Claude Code plugin CLI, Python `unittest`, GitHub Git remote, JSON marketplace/plugin manifests.
 
@@ -14,7 +14,7 @@
 
 - Modify: `README.md` — public GitHub marketplace installation and update commands.
 - Create: `scripts/README.md` — maintainer-only, branch-aware release procedure.
-- Modify: `scripts/redeploy-plugin.ps1` — local-only release/refresh script; never stage or commit it.
+- Modify: `scripts/redeploy-plugin.ps1` — branch-aware release/refresh script committed separately from the documentation.
 - Modify: `tests/test_contracts.py` — contract tests for public source and release policy.
 - Create: `docs/superpowers/plans/2026-08-28-remote-marketplace-master-release.md` — this plan.
 
@@ -42,8 +42,8 @@ class MarketplaceReleaseContractTests(unittest.TestCase):
         self.assertIn("origin/<branch>", text)
         self.assertIn("redeploy-plugin.ps1", text)
 
-    def test_release_script_is_ignored(self):
-        self.assertIn("/scripts/redeploy-plugin.ps1", read(".gitignore"))
+    def test_release_script_is_tracked(self):
+        self.assertTrue((ROOT / "scripts/redeploy-plugin.ps1").is_file())
 
     def test_user_updates_do_not_require_clone_or_pull(self):
         text = read("README.md")
@@ -112,7 +112,7 @@ Include:
 ~~~markdown
 # Maintainer release
 
-`redeploy-plugin.ps1`는 저장소에 포함하지 않는 관리자 전용 로컬 스크립트입니다. 지정한 원격 브랜치에 push된 내용을 Codex·Claude Code marketplace에서 다시 읽도록 갱신합니다.
+`redeploy-plugin.ps1`는 저장소에 포함된 관리자용 배포 스크립트입니다. 지정한 원격 브랜치에 push된 내용을 Codex·Claude Code marketplace에서 다시 읽도록 갱신합니다.
 
 ## 릴리즈 절차
 
@@ -131,7 +131,7 @@ Include:
 
 ## 운영 권한
 
-이 스크립트는 `.gitignore`에 의해 저장소에 포함되지 않으며 관리자 PC에서만 보관합니다. 실제 merge·push 권한은 Git hosting의 `master` branch protection과 관리자 credential로 제한합니다. `.gitignore`만으로 동일한 CLI 명령의 실행 자체를 보안적으로 막을 수는 없습니다.
+실제 merge·push 권한은 Git hosting의 branch protection과 관리자 credential로 제한합니다. 스크립트는 요청한 branch, 원격 동기화 상태와 plugin 유효성을 확인한 뒤에만 marketplace를 갱신합니다.
 ~~~
 ~~~
 
@@ -143,10 +143,10 @@ python -m unittest tests.test_contracts.MarketplaceReleaseContractTests -v
 
 Expected: PASS.
 
-### Task 3: Make the local release script branch-aware and remote-source based
+### Task 3: Make the versioned release script branch-aware and remote-source based
 
 **Files:**
-- Modify: `scripts/redeploy-plugin.ps1` (local-only; do not stage or commit)
+- Modify: `scripts/redeploy-plugin.ps1` (stage and commit separately from documentation)
 
 - [ ] **Step 1: Set public source and release constants.**
 
@@ -294,22 +294,22 @@ From a clean, synchronized worktree for the requested branch, run:
 
 Expected: validation passes, the public GitHub source is used, both host marketplaces are refreshed, and the restart/new-thread notice is printed.
 
-- [ ] **Step 5: Confirm ignored-file and diff boundaries.**
+- [ ] **Step 5: Confirm tracked-file and diff boundaries.**
 
 ~~~powershell
 git diff --check
-git status --short --ignored=scripts/redeploy-plugin.ps1
+git status --short -- scripts/redeploy-plugin.ps1
 ~~~
 
-Expected: no whitespace errors; `scripts/redeploy-plugin.ps1` remains ignored; unrelated user changes are not staged.
+Expected: no whitespace errors; `scripts/redeploy-plugin.ps1` is the only staged script in its separate commit; unrelated user changes are not staged.
 
-### Task 5: Commit only tracked implementation files
+### Task 5: Commit documentation and the release script separately
 
 **Files:**
 - Commit: `README.md`
 - Commit: `scripts/README.md`
 - Commit: `tests/test_contracts.py`
-- Exclude: `scripts/redeploy-plugin.ps1` because it is intentionally local-only
+- Commit separately: `scripts/redeploy-plugin.ps1`
 - Exclude: pre-existing unrelated user changes
 
 - [ ] **Step 1: Stage only approved tracked files.**
@@ -333,4 +333,4 @@ git status --short
 git show --stat --oneline --summary HEAD
 ~~~
 
-Expected: the commit contains only public installation docs, maintainer release docs, and contract tests. The local deployment script remains present only in the maintainer's ignored worktree.
+Expected: the first commit contains only public installation docs, maintainer release docs, and contract tests; the second commit contains only `scripts/redeploy-plugin.ps1`.

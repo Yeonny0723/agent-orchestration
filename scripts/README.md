@@ -1,6 +1,6 @@
 # Maintainer release
 
-`redeploy-plugin.ps1`는 저장소에 포함하지 않는 관리자 전용 로컬 스크립트입니다. 지정한 원격 브랜치에 push된 내용을 Codex·Claude Code marketplace에서 다시 읽도록 갱신합니다.
+`redeploy-plugin.ps1`는 저장소에 포함된 관리자용 배포 스크립트입니다. 지정한 원격 브랜치에 push된 내용을 Codex·Claude Code marketplace에서 다시 읽도록 갱신합니다.
 
 ## 릴리즈 절차
 
@@ -19,4 +19,4 @@
 
 ## 운영 권한
 
-이 스크립트는 `.gitignore`에 의해 저장소에 포함되지 않으며 관리자 PC에서만 보관합니다. 실제 merge·push 권한은 Git hosting의 `master` branch protection과 관리자 credential로 제한합니다. `.gitignore`만으로 동일한 CLI 명령의 실행 자체를 보안적으로 막을 수는 없습니다.
+실제 merge·push 권한은 Git hosting의 branch protection과 관리자 credential로 제한합니다. 스크립트는 요청한 branch, 원격 동기화 상태와 plugin 유효성을 확인한 뒤에만 marketplace를 갱신합니다.
