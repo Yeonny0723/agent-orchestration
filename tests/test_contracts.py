@@ -500,6 +500,52 @@ class ConventionContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
+    def test_general_pack_declares_intent_driven_code_and_yagni_rules(self):
+        text = read("conventions/general.md")
+        for phrase in (
+            "코드만 읽어서는 의도를 파악하기 어려운 표현",
+            "여러 조건이나 도메인 판단이 결합된 표현",
+            "JSX, `if`, 함수 인자에 긴 표현식을 직접 넣지 않는다",
+            "단순한 표현식이나 일회성 별칭까지 과도하게 추출하지 않는다",
+            "현재 지원해야 하는 시나리오인지 확인한다",
+            "실패 가능성이 현실적인지 확인한다",
+            "단순 방어 코드인지 실제 요구사항인지 구분한다",
+            "미래 확장용 추상화",
+            "사용하지 않는 옵션·분기·DTO 필드",
+            'const isActiveUser = user.status === "ACTIVE";',
+            "is_active = user.is_active",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_general_pack_preserves_delivery_explanation_exception(self):
+        text = read("conventions/general.md")
+        self.assertIn("장황한 설명이나 자체 비유 대신 정확한 도메인 용어", text)
+        self.assertIn("왜 이렇게 되는지 12살한테 설명하듯 알려줘", text)
+        self.assertIn("사용자가 복잡한 설명을 명시적으로 요청한 경우", text)
+
+    def test_language_pack_g10_allows_intent_extraction_exception(self):
+        expected = (
+            "일반 변수는 사용 위치 가까이에 선언한다. "
+            "단, 의도를 설명하기 위해 추출한 변수는 코드 흐름과 개념 단위가 더 잘 드러나는 위치에 둘 수 있다"
+        )
+        for path in (
+            "conventions/python/python-clean-code.md",
+            "conventions/typescript/typescript-clean-code.md",
+        ):
+            self.assertIn(expected, read(path))
+
+    def test_python_pack_limits_speculative_error_handling(self):
+        text = read("conventions/python/python-clean-code.md")
+        for phrase in (
+            "요구사항이나 기존 계약에 근거한 오류만 구현한다",
+            "임의의 오류 코드",
+            "커스텀 예외",
+            "범용 `try/except`",
+            "추가 validator",
+            "예상치 못한 오류를 조용히 삼키거나",
+        ):
+            self.assertIn(phrase, text)
+
     def test_react_pack_distinguishes_user_facing_errors(self):
         text = read("conventions/react.md")
         self.assertIn("사용자에게 노출할 오류", text)
