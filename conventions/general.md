@@ -67,10 +67,51 @@
 - 함수명은 해당 언어의 관례에 맞게 작성하되, 변환 방향과 부작용은 이름만으로 유추할 수 있어야 한다.
 - 부작용이 있는 함수는 상태 변경이나 외부 작업을 함수명에 명시한다. 조회처럼 보이는 이름으로 객체를 수정하지 않는다. `get_*`, `validate_*`, `transform_*`, `create_*`, `apply_*`는 실제 역할에 맞게 구분한다.
 
-### 조건과 반복 로직의 의도 표현
+### 선언적 코드와 의도 표현
 
-- 복잡한 조건은 의미 있는 Boolean 변수나 함수로 분리한다. `isinstance(...)` 같은 조건이 길게 반복되면 `is_table_replacement`처럼 판단 의도를 표현한다.
+- 코드만 읽어서는 의도를 파악하기 어려운 표현은 의미 있는 변수나 함수로 추출한다.
+- 여러 조건이나 도메인 판단이 결합된 표현은 Boolean 판단 변수나 판단 함수로 추출한다. 예를 들어 `isinstance(...)` 같은 조건이 길게 반복되면 `is_table_replacement`처럼 판단 의도를 표현한다.
+- 의미 있는 연산은 이름 있는 함수나 변수로 표현한다.
+- JSX, `if`, 함수 인자에 긴 표현식을 직접 넣지 않는다.
+- 단순한 표현식이나 일회성 별칭까지 과도하게 추출하지 않는다.
+- 추출한 변수의 위치는 사용처와의 거리보다 코드 흐름과 개념적 응집성을 기준으로 정한다.
 - 복잡한 comprehension은 중간 변수로 풀어 쓴다. 여러 반복문과 조건이 결합되면 입력, 선택 기준, 결과가 각각 드러나도록 단계별 변수와 구문으로 분리한다.
+
+#### React
+
+```tsx
+const isActiveUser = user.status === "ACTIVE";
+const canEdit = permissions.includes("WRITE");
+
+if (isActiveUser && canEdit) {
+  return <EditButton />;
+}
+
+const isSelected = selected.includes(item.id);
+const nextSelected = isSelected
+  ? selected.filter(id => id !== item.id)
+  : [...selected, item.id];
+
+setSelected(nextSelected);
+```
+
+#### Python
+
+```python
+is_active = user.is_active
+can_write = "write" in user.permissions
+can_update = is_active and can_write
+
+if can_update:
+    update()
+```
+
+### 과설계와 YAGNI
+
+- 현재 지원해야 하는 시나리오인지 확인한다.
+- 실패 가능성이 현실적인지 확인한다.
+- 단순 방어 코드인지 실제 요구사항인지 구분한다.
+- 발생 확률이 매우 낮은 예외 케이스, 미래 확장용 추상화, 사용하지 않는 옵션·분기·DTO 필드, 프로덕션에 불필요한 호환·중복 검증 코드는 제거 후보로 둔다.
 
 ### 계약 일관성과 입력 경계
 
@@ -114,5 +155,6 @@
 - PR은 작고 리뷰 가능한 범위로 유지하고 의미 있는 커밋으로 나눈다.
 - 문제 맥락, 변경 우선순위, 리뷰 지점, 실제 검증 명령과 결과를 제공한다.
 - 시각적 변경에는 결과를 확인할 수 있는 스크린샷을 제공한다.
-- 장황한 설명이나 자체 비유 대신 정확한 도메인 용어를 사용한다.
+- 일반적인 코드·PR 전달에서는 장황한 설명이나 자체 비유 대신 정확한 도메인 용어를 사용한다.
+- 사용자가 복잡한 설명을 명시적으로 요청한 경우에는 “왜 이렇게 되는지 12살한테 설명하듯 알려줘”를 기준으로 쉬운 말, 단계적 설명과 필요한 예시를 사용한다.
 - 리뷰어가 알아야 할 도메인 용어가 저장소에 정의되지 않았다면 `CONTEXT.md`에 정리한다.
