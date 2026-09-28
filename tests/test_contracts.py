@@ -44,7 +44,7 @@ class WorkflowContractTests(unittest.TestCase):
 
     def test_invocation_contracts_are_distinct_and_git_command_ready(self):
         text = read("skills/orchestrate-work/references/invocation-contracts.md")
-        for skill in ("implement-with-tdd", "verify-test-sensitivity", "understand-work", "write-pr"):
+        for skill in ("execute-task", "implement-with-tdd", "verify-test-sensitivity", "understand-work", "write-pr"):
             self.assertEqual(1, len(re.findall(rf"^## `{skill}`$", text, re.MULTILINE)))
         self.assertIn("1:1", text)
         self.assertIn("업무 로직을 포함하지 않는다", text)
@@ -68,6 +68,7 @@ class SkillContractTests(unittest.TestCase):
         required = {
             "setup-orchestration",
             "orchestrate-work",
+            "execute-task",
             "capture-authoring-voice",
             "author-reviewable-text",
             "decision-first-grill",
@@ -88,6 +89,28 @@ class SkillContractTests(unittest.TestCase):
             self.assertRegex(skill, r"(?m)^description: .+$")
             for key in ("display_name", "short_description", "default_prompt"):
                 self.assertRegex(metadata, rf"(?m)^\s*{key}: .+$")
+
+    def test_execute_task_keeps_review_and_commit_boundary(self):
+        skill = read("skills/execute-task/SKILL.md")
+        for phrase in (
+            "지정한 Task",
+            "관련",
+            "spec",
+            "plan",
+            "구현",
+            "검증",
+            "변경 내용",
+            "계약 영향",
+            "사용자 리뷰",
+            "승인 범위",
+            "같은 커밋",
+            "다음 Task를 시작하지 않는다",
+            "관련 없는 변경",
+        ):
+            self.assertIn(phrase, skill)
+
+        for forbidden in ("작업 규모를 판정", "질문은 최대", "항상 `implement-with-tdd`", "항상 `verify-test-sensitivity`"):
+            self.assertNotIn(forbidden, skill)
 
     def test_author_reviewable_text_preserves_content_contract(self):
         skill = read("skills/author-reviewable-text/SKILL.md")

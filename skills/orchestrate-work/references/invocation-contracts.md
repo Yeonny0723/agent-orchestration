@@ -2,6 +2,13 @@
 
 `git:commit`, `git:issue`, `git:comment`, `git:pr` command는 아래 대응 skill 하나에만 1:1로 위임하며 인자 전달 외의 업무 로직을 포함하지 않는다. provider 감지, Git 실행, 상태 전이, 검증과 문서 작성은 skill이 담당한다. 전역 Claude Code command나 다른 호스트 adapter에도 별도 Git 구현을 두지 않는다. mode 인자로 여러 기능을 분기하는 단일 command를 만들지 않는다.
 
+## `execute-task`
+
+- 책임: 지정한 Task의 관련 맥락을 확인하고 필요한 문서 갱신, 구현, 검증, 사용자 리뷰와 승인 후 로컬 커밋을 연결한다.
+- 입력: 사용자 요청, living spec과 해당되는 plan, 현재 코드·문서와 저장소 지침.
+- 종료: 승인된 Task 커밋과 검증 결과 또는 리뷰 가능한 diff와 남은 위험.
+- 호출: 사용자 직접 호출 또는 `orchestrate-work`가 만든 Task를 시작할 때.
+
 ## `implement-with-tdd`
 
 - 책임: 승인된 작업 기준에 따라 테스트 우선 구현과 일반 검증을 수행한다.
