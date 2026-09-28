@@ -1,52 +1,49 @@
 # Agent Orchestration
 
-Codex와 Claude Code에서 개발 작업을 일관된 방식으로 진행하기 위한 agent orchestration 플러그인입니다.
-작업 규모에 따라 기획 깊이를 조절하고, 사용자와 기술적 의사결정을 확정한 뒤 구현·검증·PR 작성을 연결합니다.
+Codex와 Claude Code에서 living spec과 작은 Task 단위의 리뷰·커밋 루프로 개발 작업을 진행하는 플러그인입니다.
 
 ## 해결하는 문제
 
-AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정에서 명확하게 남기고 확인하는 것을 목표로 합니다.
-
-- 작업의 규모와 필요한 워크플로우
-- spec에 들어갈 의사결정과 선택 이유
-- 구현 중 사용자와 합의해야 하는 기술적 선택
-- TDD와 일반 검증 결과
-- 테스트가 실제 변경 행위를 감지하는지에 대한 민감도 근거
-- 사용자가 현재 변경을 설명하고 문제 발생 시 수정 위치를 판단할 수 있는지
-- 실제 spec, diff와 검증 근거에 기반한 PR/MR 설명
-- 사람의 문체와 사용자의 문체로 리뷰를 맡겨 검토 과정을 빠르게 진행하는 것
+- 현재 구조와 사용자 입력 Use Case를 근거로 첫 spec 초안을 만든다.
+- 사용자의 반복 리뷰로 설계 빈칸, 예외와 운영 위험을 앞당겨 찾는다.
+- 결정 상태와 MVP 제외 범위를 하나의 living spec에서 관리한다.
+- Task마다 필요한 문서 갱신, 구현과 검증을 묶어 리뷰 가능한 diff를 만든다.
+- 승인된 Task만 관련 코드, 테스트와 문서를 같은 커밋에 포함한다.
+- TDD, 테스트 민감도, 작업 이해와 Git 도구는 필요할 때 독립적으로 사용한다.
 
 ## 기본 워크플로우
 
 ```text
-작업 규모 판정
-  -> 문제·구조·제약 탐색
-  -> spec 작성에 필요한 의사결정 확정
-  -> spec 작성 및 사용자 승인
-  -> plan 작성 중 기술적 합의
-  -> TDD 기반 구현
-  -> 테스트 민감도 검증
-  -> 선택형 작업 이해 세션
-  -> PR/MR 작성
+현재 구조 조사와 첫 living spec 초안
+  -> 사용자와 반복 spec 리뷰
+  -> 초기 spec과 Task 체크리스트 기준 커밋
+  -> 지정한 Task 구현·검증
+  -> 사용자 코드 리뷰
+  -> 승인 범위 커밋
+  -> 다음 Task
 ```
+
+질문 수, Task 크기, 별도 plan, 구현 방식과 검증 깊이는 현재 작업에 맞춰 코딩 에이전트가 판단합니다. 작고 명확한 작업은 별도 spec이나 plan을 생략할 수 있으며 코드 리뷰와 커밋 경계는 유지합니다.
 
 ## 주요 진입점
 
-### 자동 오케스트레이션
+### `orchestrate-work`
 
-`orchestrate-work` skill을 호출하면 작업 규모에 따라 필요한 단계를 선택합니다.
+중요한 작업을 시작할 때 현재 코드와 문서를 조사하고 첫 living spec과 Task 체크리스트를 만듭니다. 사용자는 초안을 여러 번 리뷰할 수 있으며 에이전트는 같은 문서를 갱신합니다.
 
-| 규모 | 판정 기준 | 기본 접근 |
-| --- | --- | --- |
-| 소형 | 명확한 버그 또는 한두 파일 변경 | 모호함이 없으면 짧게 진행 |
-| 중형 | 여러 파일·모듈에 걸친 하나의 기능 | spec 결정을 모두 확정 |
-| 대형 | 독립 배포 가능한 모듈 또는 둘 이상의 PR | 산출물별 plan과 PR로 분리 |
+### `execute-task`
 
-예상 시간이나 파일 수만으로 판정하지 않습니다. 공개 계약, 데이터 소유권, 운영 경계 또는 독립 검증 단위가 나뉘면 더 큰 규모로 올립니다.
+사용자가 지정한 Task의 관련 계약을 확인하고 필요한 spec·plan 갱신, 구현과 검증을 수행합니다. 최종 diff를 설명해 사용자 리뷰를 받고, 승인 범위가 분명하면 관련 파일만 같은 커밋에 포함합니다. 현재 Task가 커밋되기 전에는 다음 Task를 시작하지 않습니다.
 
-### 문체 처리
+### 선택형 전문 도구
 
-사용자 검토 대상 글은 `author-reviewable-text`를 통해 작성하며, `capture-authoring-voice`의 사용자 문체와 설치된 선택형 `stop-slop`·`humanizer`를 반영합니다.
+- `decision-first-grill`: living spec의 빠진 Use Case, 예외와 운영 위험을 비판적으로 검토
+- `implement-with-tdd`: 현재 Task를 테스트 우선으로 구현
+- `verify-test-sensitivity`: 회귀 위험이 큰 행위에서 테스트의 결함 감지력을 확인
+- `understand-work`: 사용자가 원할 때 현재 변경에 대한 이해를 확장
+- `commit-changes`, `write-issue`, `post-git-comment`, `write-pr`: 필요한 Git 작업을 독립적으로 수행
+
+사용자 검토 대상 글은 `author-reviewable-text`를 통해 작성하며, 사용자 문체와 설치된 `stop-slop`·`humanizer`를 선택적으로 반영합니다.
 
 ## 디렉터리 구조
 
@@ -56,29 +53,26 @@ AI가 생성한 코드의 품질만이 아니라 다음 내용을 작업 과정�
 ├── .codex-plugin/        # Codex plugin manifest
 ├── commands/             # Git 관련 얇은 command adapter
 ├── conventions/          # 공통·React·Python·TypeScript convention pack
-├── docs/                 # 확정된 spec과 plan
+├── docs/                 # living spec과 필요한 plan
 ├── scripts/              # 설치, mutation 복원, plugin 검증 도구
 ├── skills/               # Codex·Claude Code 공용 skill
-│   ├── apply-conventions/       # 언어·프레임워크별 convention pack 선택 및 적용
-│   ├── author-reviewable-text/  # 사용자 검토 대상 글의 최종 초안 작성
-│   ├── capture-authoring-voice/ # 사용자 문체 프로파일 수집 및 저장
-│   ├── commit-changes/          # 원자적 커밋 계획과 커밋 메시지 작성
-│   ├── decision-first-grill/    # spec 작성에 필요한 의사결정 확정
-│   ├── implement-with-tdd/      # 테스트 우선 구현과 검증
-│   ├── orchestrate-work/        # 작업 규모에 따른 개발 워크플로우 조합
-│   ├── post-git-comment/        # Git Issue·PR·MR 코멘트 작성 및 게시
-│   ├── setup-orchestration/     # 플러그인과 외부 skill 의존성 설치
-│   ├── understand-work/         # 현재 변경을 이해하기 위한 질문 진행
-│   ├── verify-test-sensitivity/ # 테스트의 변경 감지 여부 검증
-│   ├── write-issue/             # GitHub·GitLab Issue 작성 및 게시
-│   └── write-pr/                # GitHub·GitLab PR·MR 작성 및 게시
-├── templates/            # spec, plan, 검증 근거 등의 문서 템플릿
+│   ├── apply-conventions/       # 언어·프레임워크별 convention 적용
+│   ├── author-reviewable-text/  # 사용자 검토 대상 글 작성
+│   ├── commit-changes/          # 원자적 로컬 커밋
+│   ├── decision-first-grill/    # living spec 비판적 검토
+│   ├── execute-task/            # 지정 Task 구현, 리뷰와 커밋 연결
+│   ├── implement-with-tdd/      # 선택형 테스트 우선 구현
+│   ├── orchestrate-work/        # living spec과 Task 계획 작성
+│   ├── setup-orchestration/     # 플러그인과 선택형 skill 설정
+│   ├── verify-test-sensitivity/ # 선택형 테스트 민감도 검증
+│   └── ...                      # 작업 이해와 Git 작성 도구
+├── templates/            # spec과 검증 근거 템플릿
 └── tests/                # 계약·인수·스크립트 테스트
 ```
 
-## 설치와 의존성
+## 설치와 선택형 의존성
 
-플러그인 원본을 Codex와 Claude Code에서 사용자 전역 plugin으로 설치하려면 저장소 경로를 각 호스트의 marketplace로 등록한 뒤 plugin을 설치합니다. 이 저장소는 현재 root 자체를 plugin source로 가리키는 marketplace manifest를 제공합니다.
+저장소 경로를 각 호스트의 marketplace로 등록한 뒤 플러그인을 설치합니다.
 
 Claude Code:
 
@@ -94,10 +88,10 @@ codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestra
 codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
 
-의존성:
+다음 외부 skill은 설치돼 있으면 활용할 수 있으며 없어도 기본 workflow를 사용할 수 있습니다.
 
 - `superpowers`
 - `grill-with-docs`
 - `domain-modeling`
-- 선택형 `stop-slop`
-- 선택형 `humanizer`
+- `stop-slop`
+- `humanizer`

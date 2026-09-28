@@ -51,6 +51,30 @@ class WorkflowContractTests(unittest.TestCase):
         for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, text)
 
+    def test_public_docs_and_manifests_describe_the_living_spec_task_loop(self):
+        readme = read("README.md")
+        context = read("CONTEXT.md")
+        manifests = "\n".join(
+            read(path)
+            for path in (
+                ".codex-plugin/plugin.json",
+                ".claude-plugin/plugin.json",
+                ".claude-plugin/marketplace.json",
+            )
+        )
+
+        for text in (readme, context, manifests):
+            self.assertIn("living spec", text)
+            self.assertIn("Task", text)
+
+        for phrase in ("작업 규모 판정", "규모별", "소형, 중형, 대형"):
+            self.assertNotIn(phrase, readme)
+            self.assertNotIn(phrase, context)
+            self.assertNotIn(phrase, manifests)
+
+        self.assertIn("execute-task", readme)
+        self.assertIn("선택형", readme)
+
 
 class SkillContractTests(unittest.TestCase):
     def assert_pr_authoring_prerequisites(self, skill: str):
