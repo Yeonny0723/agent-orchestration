@@ -11,17 +11,17 @@
 
 ## `implement-with-tdd`
 
-- 책임: 승인된 작업 기준에 따라 테스트 우선 구현과 일반 검증을 수행한다.
-- 입력: 승인된 spec, 해당되는 plan과 계획 기술 합의, 저장소 지침.
-- 종료: 실제 diff, 일반 검증 명령과 결과, `verify-test-sensitivity` 안내.
-- 호출: 사용자 직접 호출 또는 `orchestrate-work` 위임.
+- 책임: 현재 Task의 목표와 완료 조건에 따라 테스트 우선 구현과 일반 검증을 수행한다.
+- 입력: 현재 Task 계약, 관련 spec·plan과 저장소 지침.
+- 종료: 실제 diff와 일반 검증 명령 및 결과.
+- 호출: 사용자 직접 호출 또는 `execute-task`가 구현 전략으로 선택.
 
 ## `verify-test-sensitivity`
 
 - 책임: 작은 행위 결함을 관련 테스트가 감지하는지 확인하고 정확히 복원한다.
 - 입력: TDD 완료 근거, 현재 diff, 관련 테스트 명령.
 - 종료: killed/survived 판정, 복원 hash, 원본 상태 검증 결과.
-- 호출: 사용자 직접 호출 또는 `orchestrate-work` 위임.
+- 호출: 사용자 직접 호출 또는 `execute-task`가 회귀 위험을 근거로 선택.
 
 ## `understand-work`
 

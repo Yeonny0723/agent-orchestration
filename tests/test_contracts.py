@@ -276,17 +276,23 @@ class SkillContractTests(unittest.TestCase):
 
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
-        for phrase in ("전수 목록화", "한 번에 한 질문", "선택지", "트레이드오프", "추천안", "spec 작성 금지"):
+        for phrase in ("living spec", "사용자 입력", "Use Case", "예외", "운영 위험", "선택지", "트레이드오프", "추천안", "결정 상태"):
             self.assertIn(phrase, skill)
-        self.assertIn("grill-with-docs", skill)
-        self.assertIn("domain-modeling", skill)
+        for obsolete_constraint in ("전수 목록화", "spec 작성 금지", "최대 두 질문", "setup-orchestration`으로 돌려보낸다"):
+            self.assertNotIn(obsolete_constraint, skill)
+        for dependency in ("grill-with-docs", "domain-modeling"):
+            self.assertIn(dependency, skill)
+        self.assertIn("설치되지 않아도", skill)
 
     def test_tdd_entrypoint_delegates_without_crossing_boundaries(self):
         text = read("skills/implement-with-tdd/SKILL.md")
         self.assertIn("superpowers:test-driven-development", text)
         self.assertIn("사용자 직접 호출", text)
-        self.assertIn("orchestrate-work", text)
+        self.assertIn("execute-task", text)
         self.assertIn("verify-test-sensitivity", text)
+        self.assertIn("현재 Task", text)
+        self.assertIn("설치되지 않아도", text)
+        self.assertIn("선택", text)
         for forbidden in ("mutation을 직접 수행", "PR을 생성한다", "이해 질문을 생성한다"):
             self.assertNotIn(forbidden, text)
 
@@ -295,6 +301,9 @@ class SkillContractTests(unittest.TestCase):
         for phrase in ("byte snapshot", "SHA-256", "killed", "survived", "hash", "복원"):
             self.assertIn(phrase, text)
         self.assertIn("사용자 직접 호출", text)
+        self.assertIn("회귀 위험", text)
+        self.assertIn("모든 Task", text)
+        self.assertIn("의무", text)
 
     def test_understanding_is_manual_chat_only_and_capped(self):
         text = read("skills/understand-work/SKILL.md")
@@ -458,6 +467,8 @@ class SkillContractTests(unittest.TestCase):
             self.assertIn(dependency, text)
         for phrase in ("항목별 승인", "사용자 범위", "directory junction", "symbolic link", "덮어쓰지"):
             self.assertIn(phrase, text)
+        self.assertIn("선택형", text)
+        self.assertIn("기본 workflow를 차단하지 않는다", text)
 
     def test_setup_offers_optional_authoring_skills_without_blocking(self):
         text = read("skills/setup-orchestration/SKILL.md")
