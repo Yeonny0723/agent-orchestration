@@ -299,12 +299,13 @@ skill description, setup 의존성, README와 acceptance 사례까지 확인해 
 - [x] Task 5: grill, TDD와 테스트 민감도 검증을 전문 도구로 유지하고 외부 skill 의존성을 비차단형으로 전환한다.
 - [x] Task 6: commit, PR과 Git 관련 독립 도구의 중복 승인을 정리한다.
 - [x] Task 7: README, CONTEXT, setup, manifests와 acceptance 사례를 새 흐름에 맞춘다.
-- [ ] Task 8: 두 호스트에서 초기 spec과 Task 반복 흐름을 검증한다.
+- [x] Task 8: 두 호스트에서 초기 spec과 Task 반복 흐름을 검증한다.
 
 ## Task 8 검증 근거
 
 - `claude plugin validate .`: 로컬 marketplace manifest 검증 통과
-- 설치 cache 0.1.1 확인 후 새 workflow를 구분할 수 있도록 source manifest를 0.2.0으로 올림
-- 두 호스트의 0.2.0 설치·활성 상태 확인은 진행 중
+- 격리된 Codex home에서 로컬 marketplace 등록 후 `codex plugin list`: 현재 저장소의 plugin source 노출 확인
+- source manifest와 Claude marketplace version을 0.2.0으로 맞추고 교차 호스트 version 계약 테스트 통과
 - Python 3.14.2로 `scripts/validate_plugin.py` 실행: 두 manifest, 공통 skill metadata와 command 위임 구조 검증 통과
 - `python -m unittest discover -s tests -v`: 두 호스트 인수 사례를 포함한 전체 테스트 통과
+- 전역 설치 cache는 GitHub의 다른 branch를 추적하는 0.1.1이므로 변경하지 않았다. 0.2.0 배포 설치 확인은 현재 branch가 원격 marketplace에 게시된 뒤 수행한다.
