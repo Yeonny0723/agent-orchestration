@@ -18,25 +18,29 @@ def section(text: str, heading: str) -> str:
 
 
 class WorkflowContractTests(unittest.TestCase):
-    def test_scale_cases_cover_all_sizes(self):
-        cases = json.loads(read("tests/fixtures/work-scale-cases.json"))
-        self.assertEqual({"small", "medium", "large"}, {case["expected"] for case in cases})
+    def test_acceptance_contract_covers_living_spec_and_task_review_loop(self):
+        cases = read("tests/acceptance/cases.md")
+        expected = read("tests/acceptance/expected.md")
+        scenarios = (
+            "초기 living spec",
+            "반복 spec 리뷰",
+            "초기 spec 기준 커밋",
+            "작고 명확한 작업",
+            "Task 실행과 코드 리뷰",
+            "리뷰 수정",
+            "커밋 승인",
+            "다음 Task 차단",
+            "전문 도구 선택",
+            "외부 skill 부재",
+            "관련 없는 변경 보존",
+        )
 
-    def test_workflow_has_required_order(self):
-        text = read("skills/orchestrate-work/references/workflow.md")
-        headings = [
-            "규모 판정",
-            "범위 탐색",
-            "의사결정",
-            "spec 승인",
-            "계획 기술 합의",
-            "TDD 기반 구현",
-            "테스트 민감도",
-            "선택형 작업 이해",
-            "PR 작성",
-        ]
-        positions = [text.index(f"## {heading}") for heading in headings]
-        self.assertEqual(sorted(positions), positions)
+        for scenario in scenarios:
+            self.assertIn(f"## {scenario}", cases)
+            self.assertIn(f"## {scenario}", expected)
+
+        for obsolete_constraint in ("규모 라우팅", "최대 두 질문", "전수 목록화"):
+            self.assertNotIn(obsolete_constraint, expected)
 
     def test_invocation_contracts_are_distinct_and_git_command_ready(self):
         text = read("skills/orchestrate-work/references/invocation-contracts.md")
