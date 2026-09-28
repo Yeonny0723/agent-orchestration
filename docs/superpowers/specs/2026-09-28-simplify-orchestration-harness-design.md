@@ -297,6 +297,6 @@ skill description, setup 의존성, README와 acceptance 사례까지 확인해 
 - [x] Task 3: `orchestrate-work`와 spec 템플릿을 최소 코어에 맞게 단순화한다.
 - [x] Task 4: Task 실행, 코드 리뷰와 승인 후 커밋을 연결하는 진입점을 구현한다.
 - [x] Task 5: grill, TDD와 테스트 민감도 검증을 전문 도구로 유지하고 외부 skill 의존성을 비차단형으로 전환한다.
-- [ ] Task 6: commit, PR과 Git 관련 독립 도구의 중복 승인을 정리한다.
+- [x] Task 6: commit, PR과 Git 관련 독립 도구의 중복 승인을 정리한다.
 - [ ] Task 7: README, CONTEXT, setup, manifests와 acceptance 사례를 새 흐름에 맞춘다.
 - [ ] Task 8: 두 호스트에서 초기 spec과 Task 반복 흐름을 검증한다.

@@ -470,6 +470,12 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("선택형", text)
         self.assertIn("기본 workflow를 차단하지 않는다", text)
 
+    def test_git_skills_do_not_repeat_existing_approval(self):
+        for name in ("commit-changes", "write-issue", "post-git-comment", "write-pr"):
+            text = read(f"skills/{name}/SKILL.md")
+            for phrase in ("현재 요청", "승인으로 본다", "다시 승인"):
+                self.assertIn(phrase, text, name)
+
     def test_setup_offers_optional_authoring_skills_without_blocking(self):
         text = read("skills/setup-orchestration/SKILL.md")
         for dependency in ("stop-slop", "humanizer"):

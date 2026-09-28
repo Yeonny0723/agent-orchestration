@@ -15,8 +15,8 @@ description: 구현이 끝난 현재 저장소에서 승인된 spec과 실제 di
 2. 현재 저장소의 실제 diff를 직접 읽고 최종 변경 범위와 리뷰 포인트를 추출한다.
 3. plugin root의 `conventions/general.md`와 이 skill의 `assets/pr-template.md`, `references/writing-pr-rules.md`를 읽는다.
 4. 저장소 지침과 plan에서 일반 검증 명령을 식별해 현재 diff에 다시 실행한다.
-5. `verify-test-sensitivity`를 현재 diff에 다시 실행하고 mutation이 정확히 복원됐는지 확인한다.
-6. 검증이 실패하거나 실행할 수 없으면 PR 작성을 중단하고 부족한 근거를 보고한다.
+5. 새 테스트의 결함 감지력이 불확실하거나 회귀 위험이 크면 기존 `verify-test-sensitivity` 근거를 확인하거나 현재 diff에 실행한다.
+6. 필수 검증이 실패하면 PR 작성을 중단한다. 실행할 수 없는 검증은 이유와 남은 위험을 초안에 명시한다.
 
 `understand-work 실행 여부와 무관`하게 진행하며 이해 세션 결과를 요구하지 않는다. 별도 PR 지식 패킷이나 중간 문서를 만들지 않는다.
 
@@ -31,7 +31,9 @@ description: 구현이 끝난 현재 저장소에서 승인된 spec과 실제 di
 
 ## 승인과 생성
 
-1. 제목과 본문 초안, target branch, provider, push 여부와 실행할 외부 명령을 사용자에게 보여주고 사용자 승인을 받는다.
+현재 요청이 현재 branch의 PR·MR 생성과 push를 구체적으로 지시하거나 사용자가 제시된 초안을 생성하라고 명시했다면 외부 쓰기 승인으로 본다. 이 경우 같은 범위를 다시 승인받지 않는다.
+
+1. 생성 지시가 없거나 제목, 본문, target branch, provider 또는 push 범위가 불분명하면 초안과 실행할 외부 명령을 사용자에게 보여주고 사용자 승인을 받는다.
 2. 승인 전에는 push나 PR·MR 생성을 하지 않는다.
 3. 승인 후 현재 branch가 target branch가 아닌지 확인하고 `git push -u origin HEAD`로 source branch를 push한다.
 4. GitHub에서는 `gh pr create`, GitLab에서는 `glab mr create`로 승인된 제목과 본문을 생성한다.
