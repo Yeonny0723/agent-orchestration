@@ -64,12 +64,6 @@ class SkillContractTests(unittest.TestCase):
         for prerequisite in prerequisites:
             self.assertLess(authoring.index(prerequisite), author, prerequisite)
 
-    def assert_plan_consensus_precedes_authoring(self, skill: str):
-        plan = section(skill, "plan 작성")
-        consensus = plan.index("계획 기술 합의가 끝나면")
-        author = plan.index("`author-reviewable-text`")
-        self.assertLess(consensus, author)
-
     def test_required_skills_have_metadata(self):
         required = {
             "setup-orchestration",
@@ -219,15 +213,50 @@ class SkillContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, skill)
 
+    def test_orchestrate_work_creates_a_reviewable_living_spec(self):
+        skill = read("skills/orchestrate-work/SKILL.md")
+        template = read("templates/spec.md")
+
+        for phrase in (
+            "현재 구조",
+            "사용자 입력",
+            "예외 흐름",
+            "운영 위험",
+            "living spec",
+            "결정 상태",
+            "MVP 제외",
+            "Task 체크리스트",
+            "반복",
+        ):
+            self.assertIn(phrase, skill)
+
+        for obsolete_constraint in (
+            "작업 규모",
+            "최대 두",
+            "전수 목록화",
+            "현재 단계를 정확히 하나",
+            "결정이 모두 확정",
+        ):
+            self.assertNotIn(obsolete_constraint, skill)
+
+        for heading in (
+            "기능 목표",
+            "현재 구조와 제약",
+            "사용자 Use Case",
+            "예외와 운영 위험",
+            "결정 기록",
+            "MVP 제외",
+            "완료 기준",
+            "Task 계획",
+        ):
+            self.assertIn(f"## {heading}", template)
+
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
         for phrase in ("전수 목록화", "한 번에 한 질문", "선택지", "트레이드오프", "추천안", "spec 작성 금지"):
             self.assertIn(phrase, skill)
         self.assertIn("grill-with-docs", skill)
         self.assertIn("domain-modeling", skill)
-        template = read("templates/spec.md")
-        for heading in ("문제", "목적", "현재 구조와 제약", "결정", "비목표", "완료 기준"):
-            self.assertIn(f"## {heading}", template)
 
     def test_tdd_entrypoint_delegates_without_crossing_boundaries(self):
         text = read("skills/implement-with-tdd/SKILL.md")
@@ -293,27 +322,6 @@ class SkillContractTests(unittest.TestCase):
                 weakened = without_author.replace(prerequisite, f"{author} {prerequisite}", 1)
                 with self.assertRaises(AssertionError):
                     self.assert_pr_authoring_prerequisites(weakened)
-
-    def test_orchestrate_plan_authoring_passes_only_confirmed_technology_decisions(self):
-        skill = read("skills/orchestrate-work/SKILL.md")
-        plan = section(skill, "plan 작성")
-        self.assert_plan_consensus_precedes_authoring(skill)
-        self.assertIn("승인된 spec과 확정된 기술 결정인 확인된 사실", plan)
-        self.assertIn("확정된 기술 결정만 전달", plan)
-        self.assertIn("일반적인 기술 선택을 추가하거나 대안이나 새로운 선택지를 다시 열지 않는다", plan)
-        self.assertNotIn("길이 제한과 기술 선택지를 전달", plan)
-
-    def test_orchestrate_plan_order_assertion_rejects_authoring_before_consensus(self):
-        skill = read("skills/orchestrate-work/SKILL.md")
-        author = "`author-reviewable-text`"
-        consensus = "계획 기술 합의가 끝나면"
-        weakened = skill.replace(author, "author-reviewable-text", 1).replace(
-            consensus,
-            f"{author} {consensus}",
-            1,
-        )
-        with self.assertRaises(AssertionError):
-            self.assert_plan_consensus_precedes_authoring(weakened)
 
     def test_git_commands_delegate_one_to_one_without_business_logic(self):
         commands = {
@@ -390,7 +398,7 @@ class SkillContractTests(unittest.TestCase):
     def test_reviewable_text_authoring_is_centralized_and_scoped(self):
         included = {
             "decision-first-grill": ("spec 작성", "spec 작성", "승인을 받는다"),
-            "orchestrate-work": ("plan 작성", "plan 작성", "승인 게이트로 만들지는 않는다"),
+            "orchestrate-work": ("초안 작성", "초안 작성", "사용자 리뷰"),
             "write-issue": ("초안 작성", "승인과 생성", "승인 전에는 issue"),
             "post-git-comment": ("초안과 승인", "초안과 승인", "승인 전에는 코멘트"),
             "write-pr": ("작성과 provider 감지", "승인과 생성", "승인 전에는 push"),
