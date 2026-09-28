@@ -1,6 +1,6 @@
 {
   "name": "agent-orchestration",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "코딩 에이전트를 위한 living spec과 Task 단위 구현·리뷰 워크플로우.",
   "author": {
     "name": "kkjuyeon"

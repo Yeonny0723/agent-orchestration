@@ -75,6 +75,17 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("execute-task", readme)
         self.assertIn("선택형", readme)
 
+    def test_cross_host_manifests_share_the_marketplace_release_version(self):
+        codex = json.loads(read(".codex-plugin/plugin.json"))
+        claude = json.loads(read(".claude-plugin/plugin.json"))
+        marketplace = json.loads(read(".claude-plugin/marketplace.json"))
+        plugin = next(item for item in marketplace["plugins"] if item["name"] == "agent-orchestration")
+
+        self.assertEqual("0.2.0", codex["version"])
+        self.assertEqual(codex["version"], claude["version"])
+        self.assertEqual(codex["version"], marketplace["version"])
+        self.assertEqual(codex["version"], plugin["version"])
+
 
 class SkillContractTests(unittest.TestCase):
     def assert_pr_authoring_prerequisites(self, skill: str):
