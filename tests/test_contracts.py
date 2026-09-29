@@ -147,6 +147,23 @@ class SkillContractTests(unittest.TestCase):
         for forbidden in ("작업 규모를 판정", "질문은 최대", "항상 `implement-with-tdd`", "항상 `verify-test-sensitivity`"):
             self.assertNotIn(forbidden, skill)
 
+    def test_execute_task_orders_the_manual_review_guide(self):
+        review = section(read("skills/execute-task/SKILL.md"), "사용자 리뷰")
+        headings = ("변경 요약", "테스트 검증 내용", "리뷰 순서")
+        positions = [review.index(f"### {heading}") for heading in headings]
+
+        self.assertEqual(sorted(positions), positions)
+        for phrase in (
+            "변경·수정·기능 개발",
+            "테스트 파일",
+            "검증하는 행위",
+            "테스트를 추가하지 않았다면",
+            "파일 경로",
+            "확인할 내용",
+            "권장 순서",
+        ):
+            self.assertIn(phrase, review)
+
     def test_author_reviewable_text_preserves_content_contract(self):
         skill = read("skills/author-reviewable-text/SKILL.md")
         for phrase in (
