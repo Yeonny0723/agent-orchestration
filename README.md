@@ -88,6 +88,12 @@ codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestra
 codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
 
+원격 marketplace의 최신 변경사항을 반영하려면:
+
+```powershell
+codex plugin marketplace upgrade agent-orchestration-marketplace
+```
+
 다음 외부 skill은 설치돼 있으면 활용할 수 있으며 없어도 기본 workflow를 사용할 수 있습니다.
 
 - `superpowers`
