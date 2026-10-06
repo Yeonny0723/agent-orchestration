@@ -1,0 +1,4 @@
+interface:
+  display_name: "리뷰 코멘트 반영"
+  short_description: "GitHub PR·GitLab MR 리뷰 코멘트를 수정하고 검증 후 커밋·push"
+  default_prompt: "현재 세션의 PR/MR에서 새 리뷰 코멘트를 읽고 실행 가능한 수정만 반영한 뒤 검증하고 커밋·push해 주세요."

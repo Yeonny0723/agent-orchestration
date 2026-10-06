@@ -58,41 +58,54 @@ Codex와 Claude Code에서 living spec과 작은 Task 단위의 리뷰·커밋 �
 ├── skills/               # Codex·Claude Code 공용 skill
 │   ├── apply-conventions/       # 언어·프레임워크별 convention 적용
 │   ├── author-reviewable-text/  # 사용자 검토 대상 글 작성
+│   ├── capture-authoring-voice/ # 사용자 문체 프로파일 수집
 │   ├── commit-changes/          # 원자적 로컬 커밋
 │   ├── decision-first-grill/    # living spec 비판적 검토
 │   ├── execute-task/            # 지정 Task 구현, 리뷰와 커밋 연결
 │   ├── implement-with-tdd/      # 선택형 테스트 우선 구현
 │   ├── orchestrate-work/        # living spec과 Task 계획 작성
+│   ├── post-git-comment/        # Git Issue·PR·MR 코멘트 작성
+│   ├── review-comment/          # 새 PR·MR 리뷰 코멘트 반영
 │   ├── setup-orchestration/     # 플러그인과 선택형 skill 설정
+│   ├── understand-work/         # 현재 변경 이해 확장
 │   ├── verify-test-sensitivity/ # 선택형 테스트 민감도 검증
-│   └── ...                      # 작업 이해와 Git 작성 도구
+│   ├── write-issue/             # GitHub·GitLab Issue 작성
+│   └── write-pr/                # GitHub·GitLab PR·MR 작성
 ├── templates/            # spec과 검증 근거 템플릿
 └── tests/                # 계약·인수·스크립트 테스트
 ```
 
-## 설치와 선택형 의존성
+## 설치와 업데이트
 
-저장소 경로를 각 호스트의 marketplace로 등록한 뒤 플러그인을 설치합니다.
+공개 GitHub marketplace에서 설치하므로 사용자는 이 저장소를 clone하거나 pull할 필요가 없습니다. 기본 배포 브랜치는 `master`이며, 다른 브랜치를 시험할 때는 설치 명령의 branch 값을 바꿉니다.
 
 Claude Code:
 
 ```powershell
-claude plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration" --scope user
+claude plugin marketplace add "https://github.com/Yeonny0723/agent-orchestration.git#master" --scope user
 claude plugin install agent-orchestration@agent-orchestration-marketplace --scope user
 ```
 
 Codex:
 
 ```powershell
-codex plugin marketplace add "C:\Users\<사용자>\orca\projects\agent-orchestration"
+codex plugin marketplace add Yeonny0723/agent-orchestration --ref master
 codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
 
-원격 marketplace의 최신 변경사항을 반영하려면:
+다른 브랜치를 설치하려면 Claude Code는 Git URL 뒤의 `#<branch>`를, Codex는 `--ref <branch>`를 같은 브랜치 이름으로 바꿉니다.
+
+업데이트:
 
 ```powershell
+claude plugin marketplace update agent-orchestration-marketplace
+claude plugin update agent-orchestration@agent-orchestration-marketplace --scope user
+
 codex plugin marketplace upgrade agent-orchestration-marketplace
+codex plugin add agent-orchestration@agent-orchestration-marketplace
 ```
+
+Codex에서는 `codex plugin marketplace upgrade` 후 `codex plugin add`가 plugin을 다시 등록·설치합니다. 업데이트한 skill을 적용하려면 Codex 새 스레드 또는 Claude Code 재시작이 필요할 수 있습니다.
 
 다음 외부 skill은 설치돼 있으면 활용할 수 있으며 없어도 기본 workflow를 사용할 수 있습니다.
 

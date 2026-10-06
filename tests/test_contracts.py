@@ -114,6 +114,7 @@ class SkillContractTests(unittest.TestCase):
             "commit-changes",
             "write-issue",
             "post-git-comment",
+            "review-comment",
             "write-pr",
         }
         self.assertEqual(required, {path.parent.name for path in (ROOT / "skills").glob("*/SKILL.md")})
@@ -579,6 +580,76 @@ class ConventionContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, text)
 
+    def test_general_pack_covers_readability_and_boundary_rules(self):
+        text = read("conventions/general.md")
+        for phrase in (
+            "insertion_anchor_unit",
+            "transform_relative_target_to_absolute",
+            "객체를 수정하지 않는다",
+            "is_table_replacement",
+            "복잡한 comprehension",
+            "row_edits",
+            "DTO·프롬프트·서비스",
+            "병렬 목록은 `zip()`으로 조용히 잘라내지 않는다",
+            "설명용 예시",
+            "같은 프롬프트 규칙",
+            "존재 이유와 제약",
+            "대칭적인 구현",
+            "전체 테스트를 실행한다",
+            "DTO나 dataclass",
+            "필드별 역할",
+            "하나의 객체로 export",
+            "클래스 주석",
+            "명사형으로 작성",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_general_pack_declares_intent_driven_code_and_yagni_rules(self):
+        text = read("conventions/general.md")
+        for phrase in (
+            "코드만 읽어서는 의도를 파악하기 어려운 표현",
+            "여러 조건이나 도메인 판단이 결합된 표현",
+            "JSX, `if`, 함수 인자에 긴 표현식을 직접 넣지 않는다",
+            "단순한 표현식이나 일회성 별칭까지 과도하게 추출하지 않는다",
+            "현재 지원해야 하는 시나리오인지 확인한다",
+            "실패 가능성이 현실적인지 확인한다",
+            "단순 방어 코드인지 실제 요구사항인지 구분한다",
+            "미래 확장용 추상화",
+            "사용하지 않는 옵션·분기·DTO 필드",
+            'const isActiveUser = user.status === "ACTIVE";',
+            "is_active = user.is_active",
+        ):
+            self.assertIn(phrase, text)
+
+    def test_general_pack_preserves_delivery_explanation_exception(self):
+        text = read("conventions/general.md")
+        self.assertIn("장황한 설명이나 자체 비유 대신 정확한 도메인 용어", text)
+        self.assertIn("왜 이렇게 되는지 12살한테 설명하듯 알려줘", text)
+        self.assertIn("사용자가 복잡한 설명을 명시적으로 요청한 경우", text)
+
+    def test_language_pack_g10_allows_intent_extraction_exception(self):
+        expected = (
+            "일반 변수는 사용 위치 가까이에 선언한다. "
+            "단, 의도를 설명하기 위해 추출한 변수는 코드 흐름과 개념 단위가 더 잘 드러나는 위치에 둘 수 있다"
+        )
+        for path in (
+            "conventions/python/python-clean-code.md",
+            "conventions/typescript/typescript-clean-code.md",
+        ):
+            self.assertIn(expected, read(path))
+
+    def test_python_pack_limits_speculative_error_handling(self):
+        text = read("conventions/python/python-clean-code.md")
+        for phrase in (
+            "요구사항이나 기존 계약에 근거한 오류만 구현한다",
+            "임의의 오류 코드",
+            "커스텀 예외",
+            "범용 `try/except`",
+            "추가 validator",
+            "예상치 못한 오류를 조용히 삼키거나",
+        ):
+            self.assertIn(phrase, text)
+
     def test_react_pack_distinguishes_user_facing_errors(self):
         text = read("conventions/react.md")
         self.assertIn("사용자에게 노출할 오류", text)
@@ -605,6 +676,36 @@ class AcceptanceContractTests(unittest.TestCase):
         for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, cases)
             self.assertIn(command, expected)
+
+
+class MarketplaceReleaseContractTests(unittest.TestCase):
+    def test_readme_uses_public_marketplace_source(self):
+        text = read("README.md")
+        self.assertIn("https://github.com/Yeonny0723/agent-orchestration.git", text)
+        self.assertIn("Yeonny0723/agent-orchestration", text)
+        self.assertNotIn("C:\\Users\\<사용자>", text)
+        self.assertNotIn("orca\\projects\\agent-orchestration", text)
+
+    def test_release_instructions_accept_a_requested_branch(self):
+        text = read("scripts/README.md")
+        self.assertIn(".\\scripts\\redeploy-plugin.ps1 -Branch feature/review-comment", text)
+        self.assertIn("origin/<branch>", text)
+        self.assertIn("redeploy-plugin.ps1", text)
+
+    def test_user_installation_can_pin_a_marketplace_branch(self):
+        text = read("README.md")
+        self.assertIn("--ref <branch>", text)
+        self.assertIn("#<branch>", text)
+
+    def test_release_script_is_tracked(self):
+        self.assertTrue((ROOT / "scripts/redeploy-plugin.ps1").is_file())
+
+    def test_user_updates_do_not_require_clone_or_pull(self):
+        text = read("README.md")
+        self.assertIn("codex plugin marketplace upgrade", text)
+        self.assertIn("claude plugin marketplace update", text)
+        self.assertNotIn("git clone", text)
+        self.assertNotIn("git pull", text)
 
 
 if __name__ == "__main__":
