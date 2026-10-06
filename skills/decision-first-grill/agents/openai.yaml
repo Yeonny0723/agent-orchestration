@@ -1,4 +1,4 @@
 interface:
   display_name: "의사결정 우선 그릴"
-  short_description: "spec 작성 전에 필요한 주요 설계 결정을 사용자와 함께 확정"
-  default_prompt: "이 spec에 필요한 실질적 의사결정을 하나씩 함께 확정해 주세요."
+  short_description: "living spec의 빈칸과 예외를 비판적으로 검토"
+  default_prompt: "현재 living spec에서 빠진 Use Case, 예외와 운영 위험을 찾아 결정 상태를 갱신해 주세요."

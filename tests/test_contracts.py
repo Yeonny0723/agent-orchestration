@@ -18,34 +18,73 @@ def section(text: str, heading: str) -> str:
 
 
 class WorkflowContractTests(unittest.TestCase):
-    def test_scale_cases_cover_all_sizes(self):
-        cases = json.loads(read("tests/fixtures/work-scale-cases.json"))
-        self.assertEqual({"small", "medium", "large"}, {case["expected"] for case in cases})
+    def test_acceptance_contract_covers_living_spec_and_task_review_loop(self):
+        cases = read("tests/acceptance/cases.md")
+        expected = read("tests/acceptance/expected.md")
+        scenarios = (
+            "초기 living spec",
+            "반복 spec 리뷰",
+            "초기 spec 기준 커밋",
+            "작고 명확한 작업",
+            "Task 실행과 코드 리뷰",
+            "리뷰 수정",
+            "커밋 승인",
+            "다음 Task 차단",
+            "전문 도구 선택",
+            "외부 skill 부재",
+            "관련 없는 변경 보존",
+        )
 
-    def test_workflow_has_required_order(self):
-        text = read("skills/orchestrate-work/references/workflow.md")
-        headings = [
-            "규모 판정",
-            "범위 탐색",
-            "의사결정",
-            "spec 승인",
-            "계획 기술 합의",
-            "TDD 기반 구현",
-            "테스트 민감도",
-            "선택형 작업 이해",
-            "PR 작성",
-        ]
-        positions = [text.index(f"## {heading}") for heading in headings]
-        self.assertEqual(sorted(positions), positions)
+        for scenario in scenarios:
+            self.assertIn(f"## {scenario}", cases)
+            self.assertIn(f"## {scenario}", expected)
+
+        for obsolete_constraint in ("규모 라우팅", "최대 두 질문", "전수 목록화"):
+            self.assertNotIn(obsolete_constraint, expected)
 
     def test_invocation_contracts_are_distinct_and_git_command_ready(self):
         text = read("skills/orchestrate-work/references/invocation-contracts.md")
-        for skill in ("implement-with-tdd", "verify-test-sensitivity", "understand-work", "write-pr"):
+        for skill in ("execute-task", "implement-with-tdd", "verify-test-sensitivity", "understand-work", "write-pr"):
             self.assertEqual(1, len(re.findall(rf"^## `{skill}`$", text, re.MULTILINE)))
         self.assertIn("1:1", text)
         self.assertIn("업무 로직을 포함하지 않는다", text)
         for command in ("git:commit", "git:issue", "git:comment", "git:pr"):
             self.assertIn(command, text)
+
+    def test_public_docs_and_manifests_describe_the_living_spec_task_loop(self):
+        readme = read("README.md")
+        context = read("CONTEXT.md")
+        manifests = "\n".join(
+            read(path)
+            for path in (
+                ".codex-plugin/plugin.json",
+                ".claude-plugin/plugin.json",
+                ".claude-plugin/marketplace.json",
+            )
+        )
+
+        for text in (readme, context, manifests):
+            self.assertIn("living spec", text)
+            self.assertIn("Task", text)
+
+        for phrase in ("작업 규모 판정", "규모별", "소형, 중형, 대형"):
+            self.assertNotIn(phrase, readme)
+            self.assertNotIn(phrase, context)
+            self.assertNotIn(phrase, manifests)
+
+        self.assertIn("execute-task", readme)
+        self.assertIn("선택형", readme)
+
+    def test_cross_host_manifests_share_the_marketplace_release_version(self):
+        codex = json.loads(read(".codex-plugin/plugin.json"))
+        claude = json.loads(read(".claude-plugin/plugin.json"))
+        marketplace = json.loads(read(".claude-plugin/marketplace.json"))
+        plugin = next(item for item in marketplace["plugins"] if item["name"] == "agent-orchestration")
+
+        self.assertEqual("0.2.0", codex["version"])
+        self.assertEqual(codex["version"], claude["version"])
+        self.assertEqual(codex["version"], marketplace["version"])
+        self.assertEqual(codex["version"], plugin["version"])
 
 
 class SkillContractTests(unittest.TestCase):
@@ -60,16 +99,11 @@ class SkillContractTests(unittest.TestCase):
         for prerequisite in prerequisites:
             self.assertLess(authoring.index(prerequisite), author, prerequisite)
 
-    def assert_plan_consensus_precedes_authoring(self, skill: str):
-        plan = section(skill, "plan 작성")
-        consensus = plan.index("계획 기술 합의가 끝나면")
-        author = plan.index("`author-reviewable-text`")
-        self.assertLess(consensus, author)
-
     def test_required_skills_have_metadata(self):
         required = {
             "setup-orchestration",
             "orchestrate-work",
+            "execute-task",
             "capture-authoring-voice",
             "author-reviewable-text",
             "decision-first-grill",
@@ -91,6 +125,45 @@ class SkillContractTests(unittest.TestCase):
             self.assertRegex(skill, r"(?m)^description: .+$")
             for key in ("display_name", "short_description", "default_prompt"):
                 self.assertRegex(metadata, rf"(?m)^\s*{key}: .+$")
+
+    def test_execute_task_keeps_review_and_commit_boundary(self):
+        skill = read("skills/execute-task/SKILL.md")
+        for phrase in (
+            "지정한 Task",
+            "관련",
+            "spec",
+            "plan",
+            "구현",
+            "검증",
+            "변경 내용",
+            "계약 영향",
+            "사용자 리뷰",
+            "승인 범위",
+            "같은 커밋",
+            "다음 Task를 시작하지 않는다",
+            "관련 없는 변경",
+        ):
+            self.assertIn(phrase, skill)
+
+        for forbidden in ("작업 규모를 판정", "질문은 최대", "항상 `implement-with-tdd`", "항상 `verify-test-sensitivity`"):
+            self.assertNotIn(forbidden, skill)
+
+    def test_execute_task_orders_the_manual_review_guide(self):
+        review = section(read("skills/execute-task/SKILL.md"), "사용자 리뷰")
+        headings = ("변경 요약", "테스트 검증 내용", "리뷰 순서")
+        positions = [review.index(f"### {heading}") for heading in headings]
+
+        self.assertEqual(sorted(positions), positions)
+        for phrase in (
+            "변경·수정·기능 개발",
+            "테스트 파일",
+            "검증하는 행위",
+            "테스트를 추가하지 않았다면",
+            "파일 경로",
+            "확인할 내용",
+            "권장 순서",
+        ):
+            self.assertIn(phrase, review)
 
     def test_author_reviewable_text_preserves_content_contract(self):
         skill = read("skills/author-reviewable-text/SKILL.md")
@@ -216,22 +289,63 @@ class SkillContractTests(unittest.TestCase):
         ):
             self.assertIn(phrase, skill)
 
+    def test_orchestrate_work_creates_a_reviewable_living_spec(self):
+        skill = read("skills/orchestrate-work/SKILL.md")
+        template = read("templates/spec.md")
+
+        for phrase in (
+            "현재 구조",
+            "사용자 입력",
+            "예외 흐름",
+            "운영 위험",
+            "living spec",
+            "결정 상태",
+            "MVP 제외",
+            "Task 체크리스트",
+            "반복",
+        ):
+            self.assertIn(phrase, skill)
+
+        for obsolete_constraint in (
+            "작업 규모",
+            "최대 두",
+            "전수 목록화",
+            "현재 단계를 정확히 하나",
+            "결정이 모두 확정",
+        ):
+            self.assertNotIn(obsolete_constraint, skill)
+
+        for heading in (
+            "기능 목표",
+            "현재 구조와 제약",
+            "사용자 Use Case",
+            "예외와 운영 위험",
+            "결정 기록",
+            "MVP 제외",
+            "완료 기준",
+            "Task 계획",
+        ):
+            self.assertIn(f"## {heading}", template)
+
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
-        for phrase in ("전수 목록화", "한 번에 한 질문", "선택지", "트레이드오프", "추천안", "spec 작성 금지"):
+        for phrase in ("living spec", "사용자 입력", "Use Case", "예외", "운영 위험", "선택지", "트레이드오프", "추천안", "결정 상태"):
             self.assertIn(phrase, skill)
-        self.assertIn("grill-with-docs", skill)
-        self.assertIn("domain-modeling", skill)
-        template = read("templates/spec.md")
-        for heading in ("문제", "목적", "현재 구조와 제약", "결정", "비목표", "완료 기준"):
-            self.assertIn(f"## {heading}", template)
+        for obsolete_constraint in ("전수 목록화", "spec 작성 금지", "최대 두 질문", "setup-orchestration`으로 돌려보낸다"):
+            self.assertNotIn(obsolete_constraint, skill)
+        for dependency in ("grill-with-docs", "domain-modeling"):
+            self.assertIn(dependency, skill)
+        self.assertIn("설치되지 않아도", skill)
 
     def test_tdd_entrypoint_delegates_without_crossing_boundaries(self):
         text = read("skills/implement-with-tdd/SKILL.md")
         self.assertIn("superpowers:test-driven-development", text)
         self.assertIn("사용자 직접 호출", text)
-        self.assertIn("orchestrate-work", text)
+        self.assertIn("execute-task", text)
         self.assertIn("verify-test-sensitivity", text)
+        self.assertIn("현재 Task", text)
+        self.assertIn("설치되지 않아도", text)
+        self.assertIn("선택", text)
         for forbidden in ("mutation을 직접 수행", "PR을 생성한다", "이해 질문을 생성한다"):
             self.assertNotIn(forbidden, text)
 
@@ -240,6 +354,9 @@ class SkillContractTests(unittest.TestCase):
         for phrase in ("byte snapshot", "SHA-256", "killed", "survived", "hash", "복원"):
             self.assertIn(phrase, text)
         self.assertIn("사용자 직접 호출", text)
+        self.assertIn("회귀 위험", text)
+        self.assertIn("모든 Task", text)
+        self.assertIn("의무", text)
 
     def test_understanding_is_manual_chat_only_and_capped(self):
         text = read("skills/understand-work/SKILL.md")
@@ -290,27 +407,6 @@ class SkillContractTests(unittest.TestCase):
                 weakened = without_author.replace(prerequisite, f"{author} {prerequisite}", 1)
                 with self.assertRaises(AssertionError):
                     self.assert_pr_authoring_prerequisites(weakened)
-
-    def test_orchestrate_plan_authoring_passes_only_confirmed_technology_decisions(self):
-        skill = read("skills/orchestrate-work/SKILL.md")
-        plan = section(skill, "plan 작성")
-        self.assert_plan_consensus_precedes_authoring(skill)
-        self.assertIn("승인된 spec과 확정된 기술 결정인 확인된 사실", plan)
-        self.assertIn("확정된 기술 결정만 전달", plan)
-        self.assertIn("일반적인 기술 선택을 추가하거나 대안이나 새로운 선택지를 다시 열지 않는다", plan)
-        self.assertNotIn("길이 제한과 기술 선택지를 전달", plan)
-
-    def test_orchestrate_plan_order_assertion_rejects_authoring_before_consensus(self):
-        skill = read("skills/orchestrate-work/SKILL.md")
-        author = "`author-reviewable-text`"
-        consensus = "계획 기술 합의가 끝나면"
-        weakened = skill.replace(author, "author-reviewable-text", 1).replace(
-            consensus,
-            f"{author} {consensus}",
-            1,
-        )
-        with self.assertRaises(AssertionError):
-            self.assert_plan_consensus_precedes_authoring(weakened)
 
     def test_git_commands_delegate_one_to_one_without_business_logic(self):
         commands = {
@@ -387,7 +483,7 @@ class SkillContractTests(unittest.TestCase):
     def test_reviewable_text_authoring_is_centralized_and_scoped(self):
         included = {
             "decision-first-grill": ("spec 작성", "spec 작성", "승인을 받는다"),
-            "orchestrate-work": ("plan 작성", "plan 작성", "승인 게이트로 만들지는 않는다"),
+            "orchestrate-work": ("초안 작성", "초안 작성", "사용자 리뷰"),
             "write-issue": ("초안 작성", "승인과 생성", "승인 전에는 issue"),
             "post-git-comment": ("초안과 승인", "초안과 승인", "승인 전에는 코멘트"),
             "write-pr": ("작성과 provider 감지", "승인과 생성", "승인 전에는 push"),
@@ -424,6 +520,14 @@ class SkillContractTests(unittest.TestCase):
             self.assertIn(dependency, text)
         for phrase in ("항목별 승인", "사용자 범위", "directory junction", "symbolic link", "덮어쓰지"):
             self.assertIn(phrase, text)
+        self.assertIn("선택형", text)
+        self.assertIn("기본 workflow를 차단하지 않는다", text)
+
+    def test_git_skills_do_not_repeat_existing_approval(self):
+        for name in ("commit-changes", "write-issue", "post-git-comment", "write-pr"):
+            text = read(f"skills/{name}/SKILL.md")
+            for phrase in ("현재 요청", "승인으로 본다", "다시 승인"):
+                self.assertIn(phrase, text, name)
 
     def test_setup_offers_optional_authoring_skills_without_blocking(self):
         text = read("skills/setup-orchestration/SKILL.md")

@@ -1,4 +1,4 @@
 interface:
   display_name: "작업 오케스트레이션"
-  short_description: "개발 작업을 규모에 맞는 기획과 검증 흐름으로 정확히 라우팅"
-  default_prompt: "이 개발 작업의 규모를 판정하고 적절한 워크플로우로 진행해 주세요."
+  short_description: "현재 구조를 근거로 living spec과 Task 계획 작성"
+  default_prompt: "현재 구조를 조사하고 반복 검토할 living spec 초안과 Task 체크리스트를 작성해 주세요."

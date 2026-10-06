@@ -1,0 +1,4 @@
+interface:
+  display_name: "Task 실행"
+  short_description: "지정 Task를 구현하고 리뷰 후 원자적으로 커밋"
+  default_prompt: "현재 living spec의 지정한 Task를 구현하고 검증한 뒤 리뷰와 승인 범위에 따라 커밋해 주세요."

@@ -1,24 +1,20 @@
 {
   "name": "agent-orchestration",
-  "version": "0.1.1",
-  "description": "\ucf54\ub529 \uc5d0\uc774\uc804\ud2b8\ub97c \uc704\ud55c \uaddc\ubaa8\ubcc4 \uae30\ud68d, TDD \uad6c\ud604, \uac80\uc99d, \uc791\uc5c5 \uc774\ud574, PR \uc6cc\ud06c\ud50c\ub85c\uc6b0.",
+  "version": "0.2.0",
+  "description": "코딩 에이전트를 위한 living spec과 Task 단위 구현·리뷰 워크플로우.",
   "author": {
     "name": "kkjuyeon"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Agent Orchestration",
-    "shortDescription": "\uac1c\ubc1c \uc791\uc5c5\uc758 \uae30\ud68d, \uad6c\ud604, \uac80\uc99d\uacfc PR \uc900\ube44",
-    "longDescription": "\uc791\uc5c5 \uaddc\ubaa8\uc5d0 \ub9de\ucdb0 spec \uc758\uc0ac\uacb0\uc815, TDD \uad6c\ud604, \ud14c\uc2a4\ud2b8 \ubbfc\uac10\ub3c4 \uac80\uc99d, \uc120\ud0dd\ud615 \uc791\uc5c5 \uc774\ud574\uc640 PR \uc791\uc131\uc744 Codex\uc640 Claude Code\uc5d0\uc11c \uc77c\uad00\ub418\uac8c \uc6b4\uc601\ud569\ub2c8\ub2e4.",
+    "shortDescription": "개발 작업의 기획, 구현, 검증과 PR 준비",
+    "longDescription": "현재 구조를 근거로 living spec을 발전시키고 Task별 구현, 검증, 사용자 리뷰와 커밋을 Codex와 Claude Code에서 일관되게 운영합니다.",
     "developerName": "kkjuyeon",
     "category": "Developer Tools",
-    "capabilities": [
-      "Interactive",
-      "Read",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Read", "Write"],
     "defaultPrompt": [
-      "\uc774 \uac1c\ubc1c \uc791\uc5c5\uc744 \uaddc\ubaa8\uc5d0 \ub9de\ub294 \uc6cc\ud06c\ud50c\ub85c\uc6b0\ub85c \uc9c4\ud589\ud574 \uc8fc\uc138\uc694."
+      "현재 구조를 조사해 living spec을 작성하고 지정한 Task 단위로 구현과 리뷰를 진행해 주세요."
     ]
   }
 }
