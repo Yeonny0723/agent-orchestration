@@ -1,4 +1,4 @@
 interface:
   display_name: "작업 오케스트레이션"
   short_description: "현재 구조를 근거로 living spec과 Task 계획 작성"
-  default_prompt: "현재 구조를 조사하고 반복 검토할 living spec 초안과 Task 체크리스트를 작성해 주세요."
+  default_prompt: "현재 구조와 제약을 조사하고 기능 목표와 사용자 Use Case를 먼저 정리한 living spec 초안을 작성해 주세요. 설계를 반복 검토해 범위를 좁힌 뒤 Task 계획을 만들고 spec 전체의 최종 리뷰를 진행해 주세요."
