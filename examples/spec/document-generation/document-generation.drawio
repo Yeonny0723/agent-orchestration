@@ -1,0 +1,337 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" compressed="false">
+  <diagram id="use-cases" name="01 사용자 유즈케이스">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1460" pageHeight="1200">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;독서 모임 활동 요약 PDF · 사용자 유즈케이스&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=27;">
+          <mxGeometry x="30" y="20" width="1380" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="가상 제품의 공개용 작성 예시" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="30" y="80" width="1380" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="system" value="활동 요약 PDF 기능" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#f8fbff;strokeColor=#a8bed4;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontStyle=1;">
+          <mxGeometry x="260" y="150" width="770" height="920" as="geometry" />
+        </mxCell>
+        <mxCell id="operator" value="모임 운영자" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;spacingTop=12;">
+          <mxGeometry x="45" y="480" width="110" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="draft" value="UC01·UC03 · 활동 입력 저장·수정" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="225" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-draft" value="" parent="1" edge="1" source="operator" target="draft" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="257" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="history" value="UC02·UC05 · 재진입·초안·상태 조회" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="330" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-history" value="" parent="1" edge="1" source="operator" target="history" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="362" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="export" value="UC04 · PDF 내보내기" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="435" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-export" value="" parent="1" edge="1" source="operator" target="export" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="467" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edit" value="UC06 · 생성 중 입력 변경·새 작업" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="540" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-edit" value="" parent="1" edge="1" source="operator" target="edit" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="572" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="retry" value="UC07 · 실패한 입력 사본으로 재시도" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="645" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-retry" value="" parent="1" edge="1" source="operator" target="retry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="677" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="download" value="UC08 · 결과 PDF 다운로드" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="750" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-download" value="" parent="1" edge="1" source="operator" target="download" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="782" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="expired" value="UC09 · 만료 안내·다시 내보내기" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e9f2ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;">
+          <mxGeometry x="320" y="855" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-expired" value="" parent="1" edge="1" source="operator" target="expired" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="887" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="email" value="UC10 · 이메일 공유 (후순위)" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#fff7ed;strokeColor=#e6a34d;fontFamily=Malgun Gothic;fontColor=#18324b;ellipse;dashed=1;">
+          <mxGeometry x="320" y="970" width="650" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="user-email" value="" parent="1" edge="1" source="operator" target="email" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;dashed=1;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="215" y="545" />
+              <mxPoint x="215" y="1002" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="converter" value="&lt;b&gt;PDF Converter&lt;/b&gt;&lt;br&gt;HTML → PDF 변환" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#f3edff;strokeColor=#9977cc;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry x="1130" y="420" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="store" value="&lt;b&gt;Object Store&lt;/b&gt;&lt;br&gt;파일 저장·다운로드" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#e6f7ef;strokeColor=#4ea986;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry x="1130" y="735" width="260" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="converter-link" value="" parent="1" edge="1" source="export" target="converter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="store-link" value="" parent="1" edge="1" source="download" target="store" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=none;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" value="실선: 첫 출시 포함 · 점선/주황: 후순위. 허용 조건·실패·만료 판단은 본문에 적는다." parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="35" y="1100" width="1370" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="flow" name="02 전체 흐름">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1500" pageHeight="1600">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;활동 요약 PDF · 전체 흐름&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=27;">
+          <mxGeometry x="25" y="20" width="1435" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="실제 변환기 연결 후 목표 흐름 · 목업에서는 Worker → PDF Converter 구간만 대체" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="25" y="80" width="1435" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="lane0" value="Browser" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#eff6ff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontSize=18;fontStyle=1;">
+          <mxGeometry x="20" y="145" width="250" height="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="lane1" value="Application API" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#f1f5f9;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontSize=18;fontStyle=1;">
+          <mxGeometry x="310" y="145" width="250" height="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="lane2" value="Export Worker" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#edf8f7;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontSize=18;fontStyle=1;">
+          <mxGeometry x="600" y="145" width="250" height="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="lane3" value="PDF Converter" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#f5f0ff;strokeColor=#9977cc;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontSize=18;fontStyle=1;">
+          <mxGeometry x="890" y="145" width="250" height="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="lane4" value="Object Store" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#fff8ec;strokeColor=#d6a354;fontFamily=Malgun Gothic;fontColor=#18324b;swimlane;startSize=45;fontSize=18;fontStyle=1;">
+          <mxGeometry x="1180" y="145" width="250" height="1320" as="geometry" />
+        </mxCell>
+        <mxCell id="form" value="&lt;b&gt;활동 내용 입력·저장&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="220" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="save" value="&lt;b&gt;권한·입력 검증&lt;br&gt;초안 DB 저장&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="325" y="220" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="submit" value="&lt;b&gt;PDF 만들기&lt;br&gt;Idempotency-Key&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="350" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="accept" value="&lt;b&gt;입력 사본·queued 기록&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="325" y="350" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="claim" value="&lt;b&gt;작업 가져오기&lt;br&gt;running 기록&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="615" y="350" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="html" value="&lt;b&gt;사본으로 HTML 구성&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="615" y="480" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="convert" value="&lt;b&gt;HTML → PDF 변환&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#9977cc;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="905" y="480" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="binary" value="&lt;b&gt;PDF 바이너리 수신&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="615" y="610" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="upload" value="&lt;b&gt;비공개 PDF 저장&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#d6a354;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="1195" y="610" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="watch" value="&lt;b&gt;4초 조회·재진입&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="740" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="read" value="&lt;b&gt;권한 확인·DB 조회&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="325" y="740" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="result" value="&lt;b&gt;성공·실패 DB 기록&lt;br&gt;저장 키·expires_at&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="615" y="740" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="show" value="&lt;b&gt;완료·실패·만료 표시&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="870" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="request" value="&lt;b&gt;다운로드 요청&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="1000" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="authorize" value="&lt;b&gt;권한·파일 수명 확인&lt;br&gt;짧은 서명 주소 발급&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="325" y="1000" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="open" value="&lt;b&gt;다운로드 URL 열기&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="1130" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="download" value="&lt;b&gt;PDF 바이너리 반환&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#d6a354;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="1195" y="1130" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="finish" value="&lt;b&gt;파일 다운로드&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#6199d0;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="35" y="1260" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="cleanup" value="&lt;b&gt;매시간 만료 파일 정리&lt;br&gt;삭제 실패는 다음 실행&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#42978e;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="615" y="1390" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="delete" value="&lt;b&gt;파일 삭제&lt;br&gt;없는 객체도 성공&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#d6a354;fontFamily=Malgun Gothic;fontColor=#18324b;fontSize=14;">
+          <mxGeometry x="1195" y="1390" width="220" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="a1" value="JSON" parent="1" edge="1" source="form" target="save" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a2" value="접수" parent="1" edge="1" source="submit" target="accept" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a3" value="DB 작업" parent="1" edge="1" source="accept" target="claim" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a4" value="사본" parent="1" edge="1" source="claim" target="html" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a5" value="HTML" parent="1" edge="1" source="html" target="convert" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a6" value="PDF 바이너리" parent="1" edge="1" source="convert" target="binary" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1015" y="585" />
+              <mxPoint x="725" y="585" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a7" value="PDF 바이너리" parent="1" edge="1" source="binary" target="upload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a8" value="저장 키" parent="1" edge="1" source="upload" target="result" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1305" y="715" />
+              <mxPoint x="725" y="715" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a9" value="DB" parent="1" edge="1" source="result" target="read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a10" value="조회" parent="1" edge="1" source="watch" target="read" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a11" value="작업 상태" parent="1" edge="1" source="read" target="show" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="435" y="845" />
+              <mxPoint x="145" y="845" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a12" value="jobId" parent="1" edge="1" source="request" target="authorize" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a13" value="서명 주소" parent="1" edge="1" source="authorize" target="open" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="435" y="1105" />
+              <mxPoint x="145" y="1105" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a14" value="GET" parent="1" edge="1" source="open" target="download" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a15" value="PDF 바이너리" parent="1" edge="1" source="download" target="finish" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1305" y="1235" />
+              <mxPoint x="145" y="1235" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a16" value="삭제" parent="1" edge="1" source="cleanup" target="delete" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="접수는 API, 최종 성공·실패는 Worker 책임. Browser의 연결 실패는 생성 실패가 아니다." parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="25" y="1480" width="1435" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="성공 후 48시간에 접근 차단. 파일의 물리 삭제는 다음 시간 실행까지 지연될 수 있다." parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="25" y="1525" width="1435" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="entities" name="03 엔티티 관계">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1570" pageHeight="1530">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="&lt;b&gt;활동 요약 PDF · 엔티티 관계&lt;/b&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=27;">
+          <mxGeometry x="30" y="20" width="1490" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="가상의 관계형 DB 설계 · 기존 모임 재사용, 초안·내보내기 작업 추가" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="30" y="80" width="1490" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="group" value="&lt;table cellpadding=&quot;7&quot; cellspacing=&quot;0&quot; style=&quot;width:590px;table-layout:fixed;font-size:15px;text-align:left&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#3269b1;color:white&quot;&gt;&lt;b&gt;ReadingGroup · 기존 재사용&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;VARCHAR(64) PK&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;owner_id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;운영자 식별 · NOT NULL&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;name&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;모임 이름 · VARCHAR(80)&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#3269b1;fontFamily=Malgun Gothic;fontColor=#18324b;rounded=0;spacing=0;align=left;verticalAlign=top;">
+          <mxGeometry x="45" y="170" width="590" height="168" as="geometry" />
+        </mxCell>
+        <mxCell id="draft" value="&lt;table cellpadding=&quot;7&quot; cellspacing=&quot;0&quot; style=&quot;width:650px;table-layout:fixed;font-size:15px;text-align:left&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#8052b7;color:white&quot;&gt;&lt;b&gt;ReportDraft · 신규&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;VARCHAR(64) PK&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;group_id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;FK → ReadingGroup&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;title / month&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;제목·대상 월&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;books&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;JSON 책 목록&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;meeting_count&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;0~31 · DEFAULT 0&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;notes&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;활동 메모&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;updated_at&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;UTC 저장 시각&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#8052b7;fontFamily=Malgun Gothic;fontColor=#18324b;rounded=0;spacing=0;align=left;verticalAlign=top;">
+          <mxGeometry x="805" y="170" width="650" height="328" as="geometry" />
+        </mxCell>
+        <mxCell id="job" value="&lt;table cellpadding=&quot;7&quot; cellspacing=&quot;0&quot; style=&quot;width:1410px;table-layout:fixed;font-size:15px;text-align:left&quot;&gt;&lt;tr&gt;&lt;td colspan=&quot;2&quot; style=&quot;background:#147d78;color:white&quot;&gt;&lt;b&gt;ExportJob · 신규&lt;/b&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;VARCHAR(64) PK&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;draft_id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;FK → ReportDraft&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;request_key&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;(draft_id, request_key) unique&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;input_snapshot&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;JSON · 접수 후 불변&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;retry_of_id&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;nullable self FK · 실패 원작업&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;status&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;queued / running / succeeded / failed&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;error_code / error_message&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;실패 조회 · nullable&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;object_key&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;성공 파일 위치 · nullable&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;created_at&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;접수 시각&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;started_at / finished_at&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;작업 시각 · nullable&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#f1f5f9&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;expires_at&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;성공 후 48시간 · nullable&lt;/td&gt;&lt;/tr&gt;&lt;tr style=&quot;background:#ffffff&quot;&gt;&lt;td style=&quot;width:42%;border-bottom:1px solid #d7e0e8&quot;&gt;artifact_deleted_at&lt;/td&gt;&lt;td style=&quot;border-bottom:1px solid #d7e0e8&quot;&gt;파일 삭제 완료 시각 · nullable&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#147d78;fontFamily=Malgun Gothic;fontColor=#18324b;rounded=0;spacing=0;align=left;verticalAlign=top;">
+          <mxGeometry x="45" y="690" width="1410" height="528" as="geometry" />
+        </mxCell>
+        <mxCell id="group-drafts" value="1 : N" parent="1" edge="1" source="group" target="draft" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=ERmany;startArrow=ERone;exitX=1;exitY=0.5;entryX=0;entryY=0.4;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="draft-jobs" value="1 : N" parent="1" edge="1" source="draft" target="job" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=ERmany;startArrow=ERone;exitX=0.5;exitY=1;entryX=0.75;entryY=0;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="job-retries" value="재시도 1 : N" parent="1" edge="1" source="job" target="job" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#627991;strokeWidth=2;endArrow=block;endFill=1;fontSize=13;labelBackgroundColor=#ffffff;fontFamily=Malgun Gothic;fontColor=#18324b;endArrow=ERmany;startArrow=ERone;exitX=1;exitY=0.25;entryX=1;entryY=0.8;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1500" y="830" />
+              <mxPoint x="1500" y="1120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note1" value="ReadingGroup 소유권으로 초안·작업 접근 검사. 입력 수정은 이미 접수된 input_snapshot을 바꾸지 않는다." parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="45" y="1285" width="1440" height="45" as="geometry" />
+        </mxCell>
+        <mxCell id="note2" value="PDF가 만료돼도 생성 성공 이력은 유지. 파일 수명과 메타데이터 보존 기간은 별도 정책이다." parent="1" vertex="1" style="rounded=1;whiteSpace=wrap;html=1;align=center;verticalAlign=middle;fontSize=15;spacing=8;strokeWidth=2;fillColor=#ffffff;strokeColor=#64748b;fontFamily=Malgun Gothic;fontColor=#18324b;text;strokeColor=none;fillColor=none;align=left;fontSize=16;">
+          <mxGeometry x="45" y="1350" width="1440" height="45" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

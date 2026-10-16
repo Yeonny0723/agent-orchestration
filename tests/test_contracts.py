@@ -1,6 +1,8 @@
 import json
 import re
+import struct
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -24,7 +26,7 @@ class WorkflowContractTests(unittest.TestCase):
         scenarios = (
             "초기 living spec",
             "반복 spec 리뷰",
-            "초기 spec 기준 커밋",
+            "초기 spec 최종 리뷰 및 완료",
             "작고 명확한 작업",
             "Task 실행과 코드 리뷰",
             "리뷰 수정",
@@ -295,16 +297,17 @@ class SkillContractTests(unittest.TestCase):
 
         for phrase in (
             "현재 구조",
-            "사용자 입력",
             "예외 흐름",
             "운영 위험",
             "living spec",
-            "결정 상태",
-            "MVP 제외",
-            "Task 체크리스트",
             "반복",
         ):
             self.assertIn(phrase, skill)
+
+        self.assertIn("../../templates/spec.md", skill)
+        self.assertIn("references/workflow.md", skill)
+        self.assertIn("references/diagrams.md", skill)
+        self.assertIn("../../examples/spec/document-generation/README.md", skill)
 
         for obsolete_constraint in (
             "작업 규모",
@@ -319,9 +322,9 @@ class SkillContractTests(unittest.TestCase):
             "기능 목표",
             "현재 구조와 제약",
             "사용자 Use Case",
-            "예외와 운영 위험",
+            "예외·운영 정책",
             "결정 기록",
-            "MVP 제외",
+            "이번 출시 제외 범위",
             "완료 기준",
             "Task 계획",
         ):
@@ -329,8 +332,9 @@ class SkillContractTests(unittest.TestCase):
 
     def test_decision_first_spec_contract(self):
         skill = read("skills/decision-first-grill/SKILL.md")
-        for phrase in ("living spec", "사용자 입력", "Use Case", "예외", "운영 위험", "선택지", "트레이드오프", "추천안", "결정 상태"):
+        for phrase in ("living spec", "Use Case", "예외", "운영 위험", "선택지", "트레이드오프", "추천안"):
             self.assertIn(phrase, skill)
+        self.assertIn("../../templates/spec.md", skill)
         for obsolete_constraint in ("전수 목록화", "spec 작성 금지", "최대 두 질문", "setup-orchestration`으로 돌려보낸다"):
             self.assertNotIn(obsolete_constraint, skill)
         for dependency in ("grill-with-docs", "domain-modeling"):
@@ -497,7 +501,12 @@ class SkillContractTests(unittest.TestCase):
             self.assertEqual(1, authoring.count("author-reviewable-text"), name)
             self.assertIn("반환된", authoring, name)
             self.assertIn(boundary_phrase, boundary, name)
-            self.assertLess(text.index("반환된", text.index("author-reviewable-text")), text.index(boundary_phrase), name)
+            boundary_start = text.index(f"## {boundary_heading}")
+            self.assertLess(
+                text.index("반환된", text.index("author-reviewable-text")),
+                text.index(boundary_phrase, boundary_start),
+                name,
+            )
             for phrase in ("산출물 종류", "확인된 사실", "필수 형식", "길이 제한", "반환된"):
                 self.assertIn(phrase, authoring, name)
 
@@ -662,6 +671,54 @@ class ConventionContractTests(unittest.TestCase):
     def test_migrated_root_convention_drafts_are_removed(self):
         for name in ("CLEAN_CODE.md", "CODE_CONVENTION.md", "REACT_CONVENTION.md"):
             self.assertFalse((ROOT / name).exists(), name)
+
+
+class SpecResourceContractTests(unittest.TestCase):
+    def test_local_authoring_links_resolve(self):
+        paths = [
+            ROOT / "templates/spec.md",
+            ROOT / "skills/orchestrate-work/SKILL.md",
+            ROOT / "skills/orchestrate-work/references/workflow.md",
+            ROOT / "skills/orchestrate-work/references/diagrams.md",
+            ROOT / "skills/decision-first-grill/SKILL.md",
+            ROOT / "skills/execute-task/SKILL.md",
+            *(ROOT / "examples/spec/document-generation").glob("*.md"),
+        ]
+        for path in paths:
+            self.assertTrue(path.is_file(), path.relative_to(ROOT))
+            text = path.read_text(encoding="utf-8")
+            prose = re.sub(r"```[\s\S]*?```|`[^`\n]*`", "", text)
+            for target in re.findall(r"!?\[[^\]]*\]\(([^)]+)\)", prose):
+                if "://" in target or target.startswith("#"):
+                    continue
+                relative = target.split("#", 1)[0]
+                with self.subTest(document=path.relative_to(ROOT), target=target):
+                    self.assertTrue((path.parent / relative).is_file())
+
+    def test_sample_drawio_pages_have_valid_exports_and_connections(self):
+        directory = ROOT / "examples/spec/document-generation"
+        self.assertTrue((directory / "document-generation.drawio").is_file())
+        source = ET.parse(directory / "document-generation.drawio").getroot()
+        pages = source.findall("diagram")
+        self.assertEqual(["use-cases", "flow", "entities"], [page.get("id") for page in pages])
+        spec = (directory / "spec.md").read_text(encoding="utf-8")
+        self.assertIn("./document-generation.drawio", spec)
+        for page in pages:
+            filename = f"document-generation-{page.get('id')}.png"
+            self.assertIn(f"./{filename}", spec)
+            png = (directory / filename).read_bytes()
+            self.assertEqual(b"\x89PNG\r\n\x1a\n", png[:8])
+            width, height = struct.unpack(">II", png[16:24])
+            self.assertGreater(width, 500)
+            self.assertGreater(height, 300)
+            cells = page.findall("mxGraphModel/root/mxCell")
+            ids = [cell.get("id") for cell in cells]
+            self.assertEqual(len(ids), len(set(ids)))
+            self.assertTrue(cells, page.get("id"))
+            for cell in cells:
+                for attr in ("parent", "source", "target"):
+                    if cell.get(attr) is not None:
+                        self.assertIn(cell.get(attr), ids, (page.get("id"), cell.get("id"), attr))
 
 
 class AcceptanceContractTests(unittest.TestCase):
