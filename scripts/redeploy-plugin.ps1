@@ -151,6 +151,12 @@ function Get-MarketplaceListState {
     try {
         $cleanJsonText = Remove-KnownCliWarningsFromJson $outputText "$HostName marketplace list"
         $parsedState = ConvertFrom-RequiredJson $cleanJsonText "$HostName marketplace list"
+        if ($HostName -eq "Codex" -and $parsedState -isnot [System.Array] -and $null -ne $parsedState) {
+            $marketplacesProperty = $parsedState.PSObject.Properties["marketplaces"]
+            if ($null -ne $marketplacesProperty) {
+                $parsedState = $marketplacesProperty.Value
+            }
+        }
         if ($parsedState -isnot [System.Array]) {
             throw "$HostName marketplace list must be a JSON array. No registration was removed."
         }
@@ -397,8 +403,15 @@ function Get-MarketplaceRegistrationInspection {
     }
     $refValues = @(
         (Get-DirectStringValues $marketplaceEntry @("ref", "branch", "revision") "ref")
-        (Get-SourceRefValues $sourceValues)
     )
+    $codexSourceProperty = $marketplaceEntry.PSObject.Properties["marketplaceSource"]
+    if ($HostName -eq "Codex" -and $null -ne $codexSourceProperty) {
+        $codexSource = $codexSourceProperty.Value
+        $sourceValues += @(Get-DirectStringValues $codexSource @("source") "source")
+        $typeValues += @(Get-DirectStringValues $codexSource @("sourceType") "type")
+        $refValues += @(Get-DirectStringValues $codexSource @("ref") "ref")
+    }
+    $refValues += @(Get-SourceRefValues $sourceValues)
     $hasSourceMetadata = $sourceValues.Count -gt 0
     $hasReleaseRefMetadata = $refValues.Count -gt 0
     $hasTypeMetadata = $typeValues.Count -gt 0
@@ -422,6 +435,10 @@ function Get-MarketplaceRegistrationInspection {
         return [pscustomobject]@{ State = "Replace"; Reason = "The Claude Code marketplace type is stale or incompatible." }
     }
     if ($RequireReleaseRef -and -not $hasReleaseRefMetadata) {
+        # Codex list omits the configured ref; explicitly apply the requested ref again.
+        if ($HostName -eq "Codex" -and $null -ne $codexSourceProperty -and $uniqueTypeIdentities.Count -eq 1 -and $uniqueTypeIdentities[0] -eq "git") {
+            return [pscustomobject]@{ State = "Replace"; Reason = "The Codex marketplace list does not expose its ref. Re-registering will apply '$releaseRef' explicitly." }
+        }
         throw "Could not verify the $HostName marketplace ref from structured output. No registration was removed."
     }
     if ($RequireReleaseRef -and ($uniqueRefIdentities.Count -ne 1 -or $uniqueRefIdentities[0] -ne $releaseRef)) {
