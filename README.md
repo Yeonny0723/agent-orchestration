@@ -14,16 +14,31 @@ Codex와 Claude Code에서 living spec과 작은 Task 단위의 리뷰·커밋 �
 ## 기본 워크플로우
 
 ```text
-현재 구조 조사와 첫 living spec 초안
-  -> 사용자와 반복 spec 리뷰
-  -> 초기 spec과 Task 체크리스트 기준 커밋
+현재 구조와 제약 조사
+  -> 기능 목표와 사용자 Use Case 초안
+  -> 예외·운영 위험 검토 및 불필요한 범위 축소
+  -> 사용자 비판을 반영해 반복 갱신
+  -> Task 계획 작성
+  -> spec 전체 최종 리뷰와 완료 승인
+  -> 승인된 spec 기준 커밋
   -> 지정한 Task 구현·검증
   -> 사용자 코드 리뷰
   -> 승인 범위 커밋
   -> 다음 Task
 ```
 
-질문 수, Task 크기, 별도 plan, 구현 방식과 검증 깊이는 현재 작업에 맞춰 코딩 에이전트가 판단합니다. 작고 명확한 작업은 별도 spec이나 plan을 생략할 수 있으며 코드 리뷰와 커밋 경계는 유지합니다.
+기능 목표와 사용자 Use Case를 먼저 다루고 설계 검토와 범위 축소가 끝난 다음 Task 계획을 작성합니다. 중요한 비판이나 설계 빈칸이 남으면 사용자와 같은 spec 및 그림을 계속 갱신합니다. 적용 깊이와 산출물의 작성 기준은 아래 템플릿을 따릅니다.
+
+## Spec 작성 자료
+
+| 자료 | 책임 |
+| --- | --- |
+| [Spec 템플릿](templates/spec.md) | 필수 내용·표기·Task 및 테스트 목록·완료 기준 |
+| [완성 샘플](examples/spec/document-generation/README.md) | 가상 독서 모임의 PDF 내보내기 문서와 PNG·draw.io, 절별 읽는 방법 |
+| [다이어그램 작성 지침](skills/orchestrate-work/references/diagrams.md) | 그림 제작·편집·내보내기와 파일 관리 |
+| [설계 검토 질문](skills/orchestrate-work/references/workflow.md) | 가정을 구체적인 상황으로 검토하는 질문 |
+
+`orchestrate-work`는 작성과 반복 검토의 시점을, `decision-first-grill`은 설계 비판을, `execute-task`는 구현 중 사실과 검증 결과의 갱신을 맡습니다. 내용 기준은 템플릿을 참조하고, 샘플의 제품 정책과 수치는 프로젝트별로 판단합니다.
 
 ## 주요 진입점
 
@@ -54,6 +69,7 @@ Codex와 Claude Code에서 living spec과 작은 Task 단위의 리뷰·커밋 �
 ├── commands/             # Git 관련 얇은 command adapter
 ├── conventions/          # 공통·React·Python·TypeScript convention pack
 ├── docs/                 # living spec과 필요한 plan
+├── examples/             # 완성 Spec·PNG·편집 원본과 해설
 ├── scripts/              # 설치, mutation 복원, plugin 검증 도구
 ├── skills/               # Codex·Claude Code 공용 skill
 │   ├── apply-conventions/       # 언어·프레임워크별 convention 적용
